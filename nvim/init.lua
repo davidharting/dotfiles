@@ -193,16 +193,6 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'oxfist/night-owl.nvim',
-    priority = 1000,
-    lazy = false,
-    config = function()
-      vim.cmd.colorscheme("night-owl")
-    end,
-  },
-
-  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -270,7 +260,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
