@@ -530,6 +530,10 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
+-- Autoformat via LSP on Save
+-- Taken from: https://www.jvt.me/posts/2022/03/01/neovim-format-on-save/
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+
 -- document existing key chains
 require('which-key').register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
