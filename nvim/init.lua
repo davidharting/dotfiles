@@ -1,5 +1,6 @@
-
 --[[
+-- Neovim config entrypoint.
+-- Light modifications on top of https://github.com/nvim-lua/kickstart.nvim/tree/master
 --]]
 
 -- Set <space> as the leader key
@@ -70,7 +71,7 @@ vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
-vim.o.termguicolors = true -- XXX: Latest kickstart does not have this. Try toggling off.
+vim.o.termguicolors = true
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -130,10 +131,23 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
+  {
+    -- Set lualine as statusline
+    'nvim-lualine/lualine.nvim',
+    -- See `:help lualine.txt`
+    opts = {
+      options = {
+        icons_enabled = false,
+        theme = 'auto',
+        component_separators = '|',
+        section_separators = '',
+      },
+    },
+  },
 
   -- [[ Plugin Specs list ]]
 
-   -- Git related plugins
+  -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
 
@@ -233,7 +247,7 @@ require('lazy').setup {
       -- Useful for getting pretty icons, but requires special font.
       --  If you already have a Nerd Font, or terminal set up with fallback fonts
       --  you can enable this
-      { 'nvim-tree/nvim-web-devicons' }
+      { 'nvim-tree/nvim-web-devicons' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -533,7 +547,7 @@ require('lazy').setup {
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = {  {"black", "ruff"} },
+        python = { { 'black', 'ruff' } },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
@@ -635,20 +649,36 @@ require('lazy').setup {
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-    'folke/tokyonight.nvim', -- Note: Was previously using vscode.nvim. Do I like this better?
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+  {
+    -- Theme replicating VSCode Default
+    'Mofiqul/vscode.nvim',
+    priority = 1000,
+    lazy = false,
     config = function()
-      -- Load the colorscheme here
-      vim.cmd.colorscheme 'tokyonight-night'
+      local c = require('vscode.colors').get_colors()
+      require('vscode').setup {
+        -- Enable transparent background
+        -- transparent = true,
 
-      -- You can configure highlights by doing something like
-      vim.cmd.hi 'Comment gui=none'
+        -- Enable italic comment
+        italic_comments = true,
+
+        -- Disable nvim-tree background color
+        disable_nvimtree_bg = true,
+
+        -- Override colors (see ./lua/vscode/colors.lua)
+        color_overrides = {
+          -- vscLineNumber = '#FFFFFF',
+        },
+
+        -- Override highlight groups (see ./lua/vscode/theme.lua)
+        group_overrides = {
+          -- this supports the same val table as vim.api.nvim_set_hl
+          -- use colors from this colorscheme by requiring vscode.colors!
+          Cursor = { fg = c.vscDarkBlue, bg = c.vscLightGreen, bold = false },
+        },
+      }
+      require('vscode').load()
     end,
   },
 
@@ -672,11 +702,6 @@ require('lazy').setup {
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      require('mini.statusline').setup() -- XXX: Was previously using lualine. Do I like this better?
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
