@@ -14,9 +14,10 @@ vim.g.maplocalleader = ' '
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
--- Make jumping by line count easier
-vim.opt.relativenumber = true
-
+-- Make jumping by line count easier, while still showing actual line number at cursor
+vim.wo.number = true
+vim.wo.relativenumber = true
+--
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
