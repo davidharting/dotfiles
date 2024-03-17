@@ -19,4 +19,4 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
-export $TERM="xterm-256color"
+# export $TERM="xterm-256color"
