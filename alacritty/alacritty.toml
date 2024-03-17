@@ -9,3 +9,8 @@ option_as_alt="OnlyLeft"
 normal = { family="FantasqueSansM Nerd Font Mono",  style="Regular" }
 size = 14
 
+
+[keyboard]
+bindings = [
+	{key= "k", mods= "Command", chars= "\u0002"} # Cmd+k sends Ctrl+b, to make tmux prefix easy on homerow.
+]
