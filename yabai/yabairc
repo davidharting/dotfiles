@@ -1,0 +1,11 @@
+# Symlink this file to ~/.config/yabai/yabairc
+
+yabai -m config layout bsp
+yabai -m config mouse_follows_focus on
+
+
+# Always float certain applications
+yabai -m rule --add title='^System Settings$' manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Information$" manage=off
+yabai -m rule --add title="^Preferences$" manage=off
