@@ -1,7 +1,3 @@
 # Create a symlink from this file to ~/.config/starship.toml
 
-format = """
-$directory
-$character
-"""
 
