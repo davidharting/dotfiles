@@ -30,6 +30,3 @@ return {
     require('vscode').load()
   end,
 }
--- return { 'EdenEast/nightfox.nvim' }
--- return { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = false, priority = 1000 }
--- return { 'sainnhe/everforest', name = 'everforest', lazy = false, priority = 1000 }
