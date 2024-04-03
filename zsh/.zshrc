@@ -21,3 +21,6 @@ function title {
 
 # export $TERM="xterm-256color"
 export EDITOR="nvim"
+
+# Setting editor to nvim breaks emacs-style keybindings for regular shell input. Restore that:
+bindkey -e
