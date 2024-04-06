@@ -8,3 +8,15 @@ vim.api.nvim_exec(
   ]],
   false
 )
+
+require("which-key").register {
+  ["<leader>j"] = { name = "David's scope", _ = "which_key_ignore" },
+}
+
+vim.keymap.set("n", "<leader>jt", "<cmd>Neotree filesystem reveal current<CR>", {
+  desc = "Open Neotree in curent buffer",
+})
+
+vim.keymap.set("n", "<leader>jg", "<cmd>Neogit kind=replace<CR>", {
+  desc = "Open Neogit in current buffer",
+})
