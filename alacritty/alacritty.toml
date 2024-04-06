@@ -5,7 +5,10 @@ import = [
 	# "~/.config/alacritty/themes/aura.toml"
 	# "~/.config/alacritty/themes/carbonfox.toml"
 	# "~/.config/alacritty/themes/moonfly.toml"
-	"~/.config/alacritty/themes/githubdarkdefault.toml"
+	# "~/.config/alacritty/themes/githubdarkdefault.toml"
+	# "~/.config/alacritty/themes/everforest.toml"
+	# "~/.config/alacritty/themes/vscode.toml"
+	"~/.config/alacritty/themes/rosepine.toml"
 ]
 
 [window]
