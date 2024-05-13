@@ -21,4 +21,8 @@ vim.keymap.set("n", "<leader>jg", "<cmd>Alpha<CR> | <cmd>Ge:<CR>", {
   desc = "Open vim-fugitive in current buffer",
 })
 
+vim.keymap.set("n", "<leader>jc", "<cmd>! echo %:p | pbcopy<CR>", {
+  desc = "Copy abs path to file",
+})
+
 vim.opt.showtabline = 0
