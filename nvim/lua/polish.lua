@@ -21,3 +21,4 @@ vim.keymap.set("n", "<leader>jg", "<cmd>Alpha<CR> | <cmd>Ge:<CR>", {
   desc = "Open vim-fugitive in current buffer",
 })
 
+vim.opt.showtabline = 0
