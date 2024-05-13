@@ -17,6 +17,7 @@ vim.keymap.set("n", "<leader>jt", "<cmd>Neotree filesystem reveal current<CR>", 
   desc = "Open Neotree in curent buffer",
 })
 
-vim.keymap.set("n", "<leader>jg", "<cmd>Neogit kind=replace<CR>", {
-  desc = "Open Neogit in current buffer",
+vim.keymap.set("n", "<leader>jg", "<cmd>Alpha<CR> | <cmd>Ge:<CR>", {
+  desc = "Open vim-fugitive in current buffer",
 })
+
