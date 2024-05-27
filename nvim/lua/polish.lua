@@ -25,6 +25,13 @@ vim.keymap.set("n", "<leader>jc", "<cmd>! echo %:p | pbcopy<CR>", {
   desc = "Copy abs path to file",
 })
 
+vim.keymap.set(
+  "n",
+  "<leader>jd",
+  "<cmd>lua require('dap-python').test_runner = 'pytest'<CR> | <cmd>lua require('dap-python').test_method()<CR>",
+  { desc = "Debug test closest to cursor" }
+)
+
 vim.opt.showtabline = 0
 vim.wo.relativenumber = false
 vim.wo.number = true
