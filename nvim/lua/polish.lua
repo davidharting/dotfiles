@@ -26,3 +26,5 @@ vim.keymap.set("n", "<leader>jc", "<cmd>! echo %:p | pbcopy<CR>", {
 })
 
 vim.opt.showtabline = 0
+vim.wo.relativenumber = false
+vim.wo.number = true
