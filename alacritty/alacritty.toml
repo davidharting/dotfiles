@@ -21,5 +21,38 @@ size = 16
 
 [keyboard]
 bindings = [
-	{key= "k", mods= "Command", chars= "\u0002"} # Cmd+k sends Ctrl+b, to make tmux prefix easy on homerow.
+	# Cmd+k sends Ctrl+b, to make tmux prefix easy on homerow.
+	{key= "k", mods= "Command", chars= "\u0002"}, 
+
+	# Alow me to use Command for Helix's many Alt-? combinations
+	{key= ".", mods= "Command", chars= "\u001b."},
+	{key= "`", mods= "Command", chars= "\u001b`"},
+	{key= "u", mods= "Command", chars= "\u001bu"},
+	{key= "U", mods= "Command", chars= "\u001bU"},
+	{key= "d", mods= "Command", chars= "\u001bd"},
+	{key= "c", mods= "Command", chars= "\u001bc"},
+	{key= "|", mods= "Command", chars= "\u001b|"},
+	{key= "!", mods= "Command", chars= "\u001b!"},
+	{key= "s", mods= "Command", chars= "\u001bs"},
+	{key= "-", mods= "Command", chars= "\u001b-"},
+	{key= "_", mods= "Command", chars= "\u001b_"},
+	{key= "!", mods= "Command", chars= "\u001b!"},
+	{key= ";", mods= "Command", chars= "\u001b;"},
+	{key= ",", mods= "Command", chars= "\u001b,"},
+	{key= "C", mods= "Command", chars= "\u001bC"},
+	{key= "(", mods= "Command", chars= "\u001b("},
+	{key= ")", mods= "Command", chars= "\u001b)"},
+	{key= "x", mods= "Command", chars= "\u001bx"},
+	{key= "J", mods= "Command", chars= "\u001bJ"},
+	{key= "K", mods= "Command", chars= "\u001bK"},
+	{key= "o", mods= "Command", chars= "\u001bo"},
+	{key= "n", mods= "Command", chars= "\u001bn"},
+	{key= "p", mods= "Command", chars= "\u001bp"},
+	{key= "i", mods= "Command", chars= "\u001bi"},
+	{key= "c", mods= "Command", chars= "\u001bc"},
+	{key= "d", mods= "Command", chars= "\u001bd"},
+	{key= "Enter", mods= "Command", chars= "\u001bEnter"},
+	{key= "b", mods= "Command", chars= "\u001bb"},
+	{key= "f", mods= "Command", chars= "\u001bf"},
 ]
+
