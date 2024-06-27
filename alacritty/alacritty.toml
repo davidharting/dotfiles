@@ -16,7 +16,7 @@ option_as_alt="OnlyLeft"
 
 [font]
 normal = { family="BlexMono Nerd Font",  style="Light" }
-size = 16
+size = 14
 
 
 [keyboard]
