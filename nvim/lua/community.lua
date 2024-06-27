@@ -9,4 +9,7 @@ return {
   { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.pack.typescript" },
+  { import = "astrocommunity.pack.php" },
+  { import = "astrocommunity.pack.tailwindcss" },
+  { import = "astrocommunity.pack.blade" },
 }
