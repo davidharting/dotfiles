@@ -1,0 +1,16 @@
+[[language]]
+name = "blade"
+language-servers = ["vscode-html-language-server", "tailwindcss-ls"]
+
+[language-server.tailwindcss-ls]
+config = { userLanguages = { blade="html", "*.blade.php" = "html" } }
+
+[[language]]
+name = "python"
+auto-format = true
+language-servers = [ "pyright", "ruff" ]
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+

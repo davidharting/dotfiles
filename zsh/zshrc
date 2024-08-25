@@ -1,6 +1,9 @@
 #!/bin/zsh
 
 
+# Inside of ~/.zshrc: source ~/repos/dotfiles/zsh/zshrc
+
+
 # Aliases
 
 ## kubernetes
@@ -12,6 +15,8 @@ alias gitp='git push origin $(git branch --show-current)'
 ## laravel
 alias art='php artisan'
 
+alias lg='lazygit'
+
 # Functions
 
 ## Terminal
@@ -20,7 +25,7 @@ function title {
 }
 
 # export $TERM="xterm-256color"
-export EDITOR="nvim"
+export EDITOR="hx"
 
 # Setting editor to nvim breaks emacs-style keybindings for regular shell input. Restore that:
 bindkey -e
