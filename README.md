@@ -1,8 +1,6 @@
 # dotfiles
 My configuration files
 
-- **neovim** Set up a symlink from this repo's nvim directory to ~/.config/nvim/
-- **zsh** Source this repo's zsh/.zshrc inside of ~/.zshrc
-- **k9s** Symlink skin.yml into the expected location:
-ln -s this-repo/dotfiles/k9s/skin.yml ~/Library/Application\ Support/k9s/skin.yml
 
+I use stow to manage the configuration files. See link.sh and unlink.sh.
+Still manually managing sourcing my extra zsh config and scripts.
