@@ -1,18 +1,9 @@
 import = [
-	# "~/.config/alacritty/themes/terminalapp.toml"
-	# "~/.config/alacritty/themes/dracula.toml"
-	# "~/.config/alacritty/themes/catpuccin-mocha.toml"
-	# "~/.config/alacritty/themes/aura.toml"
-	# "~/.config/alacritty/themes/carbonfox.toml"
-	# "~/.config/alacritty/themes/moonfly.toml"
-	# "~/.config/alacritty/themes/githubdarkdefault.toml"
-	# "~/.config/alacritty/themes/everforest.toml"
-	# "~/.config/alacritty/themes/vscode.toml"
-	"~/.config/alacritty/themes/current.toml" 
+	"/Users/david/repos/alacritty-theme/themes/dark_plus.toml"
 ] 
 
 [window]
-option_as_alt="OnlyLeft"
+option_as_alt="Both"
 
 [font]
 normal = { family="BlexMono Nerd Font",  style="Light" }
@@ -44,7 +35,7 @@ bindings = [
 	{key= ")", mods= "Command", chars= "\u001b)"},
 	{key= "x", mods= "Command", chars= "\u001bx"},
 	{key= "J", mods= "Command", chars= "\u001bJ"},
-	{key= "K", mods= "Command", chars= "\u001bK"},
+	# {key= "K", mods= "Command", chars= "\u001bK"}, This one is interfering with Cmd+k for some reason
 	{key= "o", mods= "Command", chars= "\u001bo"},
 	{key= "n", mods= "Command", chars= "\u001bn"},
 	{key= "p", mods= "Command", chars= "\u001bp"},
@@ -55,4 +46,5 @@ bindings = [
 	{key= "b", mods= "Command", chars= "\u001bb"},
 	{key= "f", mods= "Command", chars= "\u001bf"},
 ]
+
 
