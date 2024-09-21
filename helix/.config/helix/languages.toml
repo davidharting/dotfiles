@@ -2,6 +2,13 @@
 name = "blade"
 language-servers = ["vscode-html-language-server", "tailwindcss-ls"]
 
+[[language]]
+name = "typescript"
+auto-format = true
+formatter = { command = "prettier" }
+language-servers = ["typescript-language-server"]
+
+
 [language-server.tailwindcss-ls]
 config = { userLanguages = { blade="html", "*.blade.php" = "html" } }
 
@@ -13,4 +20,25 @@ language-servers = [ "pyright", "ruff" ]
 [language-server.ruff]
 command = "ruff"
 args = ["server"]
+
+[[language]]
+name = "html"
+language-servers = [ "vscode-html-language-server", "tailwindcss-ls" ]
+
+[[language]]
+name = "css"
+language-servers = [ "vscode-css-language-server", "tailwindcss-ls" ]
+
+[[language]]
+name = "jsx"
+language-servers = [ "typescript-language-server", "tailwindcss-ls" ]
+auto-format = true
+formatter = { command = "prettier" }
+
+[[language]]
+name = "tsx"
+language-servers = [ "typescript-language-server" ]
+formatter = { command = "prettier", args = ["--parser", "typescript"] }
+auto-format = true
+
 
