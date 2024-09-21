@@ -1,5 +1,5 @@
 import = [
-	"/Users/david/repos/alacritty-theme/themes/dark_plus.toml"
+	"/Users/david/repos/dotfiles/alacritty/.config/alacritty/astrotheme-dark.toml"
 ] 
 
 [window]
