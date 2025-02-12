@@ -10,3 +10,6 @@ select = "underline"
 
 [keys.normal.space]
 "w" = ":write" # Save buffer
+
+[editor.file-picker]
+hidden = false

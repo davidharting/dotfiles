@@ -10,35 +10,64 @@ language-servers = ["typescript-language-server"]
 
 
 [language-server.tailwindcss-ls]
-config = { userLanguages = { blade="html", "*.blade.php" = "html" } }
+config = { userLanguages = { blade = "html", "*.blade.php" = "html" } }
 
 [[language]]
 name = "python"
 auto-format = true
-language-servers = [ "pyright", "ruff" ]
+language-servers = ["basedpyright", "ruff"]
+
+[language-server.basedpyright]
+config = { typeCheckingMode = 'basic' }
 
 [language-server.ruff]
 command = "ruff"
-args = ["server"]
+args = ["server", "--preview"]
 
 [[language]]
 name = "html"
-language-servers = [ "vscode-html-language-server", "tailwindcss-ls" ]
+language-servers = ["vscode-html-language-server", "tailwindcss-ls"]
 
 [[language]]
 name = "css"
-language-servers = [ "vscode-css-language-server", "tailwindcss-ls" ]
+language-servers = ["vscode-css-language-server", "tailwindcss-ls"]
 
 [[language]]
 name = "jsx"
-language-servers = [ "typescript-language-server", "tailwindcss-ls" ]
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
 auto-format = true
 formatter = { command = "prettier" }
 
 [[language]]
 name = "tsx"
-language-servers = [ "typescript-language-server" ]
+language-servers = ["typescript-language-server"]
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
 auto-format = true
 
 
+[[language]]
+name = 'yaml'
+language-servers = ["yaml-language-server"]
+auto-format = true
+formatter = { command = "prettier", args = ['--parser', 'yaml'] }
+
+[language-server.yaml-language-server.config.yaml]
+format = { enable = true }
+validation = true
+
+[language-server.yaml-language-server.config.yaml.schemas]
+"https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}"
+
+[[language]]
+name = "hcl"
+language-servers = [ "terraform-ls" ]
+language-id = "terraform"
+
+[[language]]
+name = "tfvars"
+language-servers = [ "terraform-ls" ]
+language-id = "terraform-vars"
+
+[language-server.terraform-ls]
+command = "terraform-ls"
+args = ["serve"]
