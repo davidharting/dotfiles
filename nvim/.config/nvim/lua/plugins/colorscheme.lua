@@ -1,9 +1,9 @@
 return {
-  { "martinsione/darkplus.nvim" },
+  { "Mofiqul/vscode.nvim" },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "darkplus",
+      colorscheme = "vscode",
     },
   },
 }
