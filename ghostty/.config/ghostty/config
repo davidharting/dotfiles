@@ -1,0 +1,19 @@
+font-family = "Monaspace Argon Var Light"
+macos-option-as-alt = true
+
+# Use cmd +k as my tmux prefix by sending ctrl + b
+# https://davidharting.com/notes/how-i-use-cmdk-as-my-tmux-prefix
+keybind = cmd+k=text:\x02
+
+# vim-tmux integration wasn't working out of the box
+keybind = alt+left=text:\x1b[1;3D
+keybind = alt+right=text:\x1b[1;3C
+
+
+window-padding-x = 0
+window-padding-balance = false
+
+
+theme = Dark+
+
+
