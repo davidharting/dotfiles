@@ -2,7 +2,11 @@
 
 
 # Inside of ~/.zshrc: source ~/repos/dotfiles/zsh/zshrc
+#
+#
 
+# Integrate fzf into shell
+source <(fzf --zsh)
 
 # Aliases
 
