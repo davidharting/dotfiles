@@ -1,9 +1,57 @@
 ##!/bin/sh
 #
 # Attach or create tmux session named the same as current directory.
-# Symlink (with sudo) this file to /usr/local/bin/tat, then make it executable 
+# For git worktrees, names session as [repo-name]/[worktree-name]
+# Symlink (with sudo) this file to /usr/local/bin/tat, then make it executable
 
-session_name="$(basename "$PWD" | tr . -)"
+get_session_name() {
+  # Check if we're in a git repository
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    # Not a git repo, use directory name
+    basename "$PWD" | tr . -
+    return
+  fi
+
+  current_dir="$(basename "$PWD")"
+
+  # Check if we're in a .bare directory - treat like a worktree
+  if [ "$current_dir" = ".bare" ]; then
+    parent_name="$(basename "$(dirname "$PWD")" | tr . -)"
+    echo "${parent_name}/-bare"
+    return
+  fi
+
+  git_dir=$(git rev-parse --git-dir 2>/dev/null)
+  git_common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+
+  # Check if we're in a worktree
+  # In a worktree, git-dir and git-common-dir are different
+  if [ "$git_dir" = "$git_common_dir" ]; then
+    # Regular git repo, not a worktree
+    echo "$current_dir" | tr . -
+    return
+  fi
+
+  # We're in a worktree - build session name as repo/worktree
+  worktree_name="$(basename "$PWD" | tr . -)"
+
+  # Get repo name - prefer git remote, fall back to parent directory
+  repo_name=""
+  if git config --get remote.origin.url > /dev/null 2>&1; then
+    # Extract repo name and strip .git suffix before tr
+    repo_name=$(git config --get remote.origin.url | sed -E 's|.*/([^/]+)\.git$|\1|; s|.*/([^/]+)$|\1|')
+  fi
+
+  # Fall back to parent directory name if no remote
+  if [ -z "$repo_name" ]; then
+    repo_name="$(basename "$(dirname "$PWD")")"
+  fi
+
+  repo_name="$(echo "$repo_name" | tr . -)"
+  echo "${repo_name}/${worktree_name}"
+}
+
+session_name=$(get_session_name)
 
 session_exists() {
   tmux list-sessions | sed -E 's/:.*$//' | grep -q "^$session_name$"
@@ -20,4 +68,4 @@ else
     (TMUX='' tmux new-session -Ad -s "$session_name")
   fi
   tmux switch-client -t "$session_name"
-fi 
+fi
