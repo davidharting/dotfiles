@@ -20,6 +20,7 @@ alias gitp='git push origin $(git branch --show-current)'
 alias art='php artisan'
 
 alias lg='lazygit'
+alias yz='yazi'
 
 # Functions
 
