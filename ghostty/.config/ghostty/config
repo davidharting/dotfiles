@@ -11,6 +11,7 @@ keybind = alt+right=text:\x1b[1;3C
 
 
 window-padding-x = 0
+window-padding-y = 0
 window-padding-balance = false
 
 
