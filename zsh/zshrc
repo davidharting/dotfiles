@@ -29,6 +29,18 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
+## Accessibility
+function toggle-reduce-motion {
+    local current=$(defaults read com.apple.universalaccess reduceMotion 2>/dev/null || echo "0")
+    if [[ "$current" == "1" ]]; then
+        defaults write com.apple.universalaccess reduceMotion -bool false
+        echo "Reduce motion: OFF"
+    else
+        defaults write com.apple.universalaccess reduceMotion -bool true
+        echo "Reduce motion: ON"
+    fi
+}
+
 # export $TERM="xterm-256color"
 export EDITOR="nvim"
 
