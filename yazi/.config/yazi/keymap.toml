@@ -1,0 +1,4 @@
+[[manager.prepend_keymap]]
+on   = ["c", "i"]
+run  = "plugin copy-contents"
+desc = "Copy file contents to system clipboard"
