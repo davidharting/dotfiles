@@ -56,3 +56,10 @@ export EDITOR="nvim"
 
 # Setting editor to nvim breaks emacs-style keybindings for regular shell input. Restore that:
 bindkey -e
+
+# Update tmux pane title with current command
+if [[ -n "$TMUX" ]]; then
+    precmd() { echo -ne "\033]2;${PWD/#$HOME/~}\033\\" }
+    preexec() { echo -ne "\033]2;$1\033\\" }
+fi
+
