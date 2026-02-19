@@ -29,6 +29,16 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
+## tmux
+function tmux-reset {
+    tmux kill-pane -a
+    tmux kill-window -a
+    tmux rename-window '🖥️ nvim'
+    tmux new-window -n '✏️ scratch'
+    tmux new-window -n '🤖 claude'
+    tmux select-window -t 1
+}
+
 ## Accessibility
 function toggle-reduce-motion {
     local current=$(defaults read com.apple.universalaccess reduceMotion 2>/dev/null || echo "0")
