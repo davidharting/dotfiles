@@ -63,3 +63,6 @@ if [[ -n "$TMUX" ]]; then
     preexec() { echo -ne "\033]2;$1\033\\" }
 fi
 
+
+
+export XDG_CONFIG_HOME="$HOME/.config"
