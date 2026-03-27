@@ -29,6 +29,16 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
+function rename-pane {
+    if [[ -z "$1" ]]; then
+        unset TMUX_PANE_NAME
+        echo "Pane name cleared (back to auto)"
+    else
+        export TMUX_PANE_NAME="$*"
+        printf '\033]2;%s\033\\' "$TMUX_PANE_NAME"
+    fi
+}
+
 ## tmux
 function tmux-reset {
     tmux kill-pane -a
@@ -59,7 +69,13 @@ bindkey -e
 
 # Update tmux pane title with current command
 if [[ -n "$TMUX" ]]; then
-    precmd() { echo -ne "\033]2;${PWD/#$HOME/~}\033\\" }
+    precmd() {
+        if [[ -n "$TMUX_PANE_NAME" ]]; then
+            printf '\033]2;%s\033\\' "$TMUX_PANE_NAME"
+        else
+            echo -ne "\033]2;${PWD/#$HOME/~}\033\\"
+        fi
+    }
     preexec() { echo -ne "\033]2;$1\033\\" }
 fi
 
