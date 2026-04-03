@@ -1,0 +1,13 @@
+[tools]
+fd = "latest"
+fzf = "latest"
+gh = "latest"
+jq = "latest"
+starship = "latest"
+tmux = "latest"
+rg = "latest"
+neovim = "latest"
+lazygit = "latest"
+yazi = "latest"
+bat = "latest"
+delta = "latest"

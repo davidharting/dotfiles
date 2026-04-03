@@ -8,7 +8,7 @@ echo "Installing dotfiles from $DOTFILES_DIR"
 # Stow all packages (XDG configs + tmux)
 echo "Linking config packages..."
 stow --restow --verbose --target ~ \
-    alacritty amethyst helix k9s starship tmux bat nvim ghostty zellij lazygit yazi
+    alacritty amethyst helix k9s starship tmux bat nvim ghostty zellij lazygit yazi mise
 
 # tat script to ~/bin
 echo "Linking tat script..."
