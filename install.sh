@@ -12,8 +12,8 @@ stow --restow --verbose --target ~ \
 
 # tat script to ~/bin
 echo "Linking tat script..."
-mkdir -p ~/bin
-ln -sf "$DOTFILES_DIR/scripts/tat" ~/bin/tat
+mkdir -p ~/.local/bin
+ln -sf "$DOTFILES_DIR/scripts/tat" ~/.local/bin/tat
 
 # Source zshrc from ~/.zshrc if not already present
 SOURCE_LINE="source $DOTFILES_DIR/zsh/zshrc"
