@@ -7,6 +7,7 @@
 
 # Integrate fzf into shell
 source <(fzf --zsh)
+eval "$(zoxide init zsh)"
 
 # Aliases
 
