@@ -2,10 +2,14 @@
 
 
 # Inside of ~/.zshrc: source ~/repos/dotfiles/zsh/zshrc
-#
-#
 
-# Integrate fzf into shell
+
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# Shell integrations
+eval "$(~/.local/bin/mise activate zsh)"
+eval "$(starship init zsh)"
 source <(fzf --zsh)
 eval "$(zoxide init zsh)"
 
