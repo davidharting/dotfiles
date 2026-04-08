@@ -16,15 +16,19 @@ if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then
   mv ~/.zshrc ~/.zshrc.bak
 fi
 
-# Stow all packages (XDG configs + tmux)
+# Stow all packages
 echo "Linking config packages..."
-stow --restow --verbose --target ~ \
-  alacritty amethyst helix k9s starship tmux bat nvim ghostty zellij lazygit yazi mise git uv zsh
+for dir in "$DOTFILES_DIR"/*/; do
+  pkg="${dir%/}"
+  pkg="${pkg##*/}"
+  [[ "$pkg" == "scripts" ]] && continue
+  stow --restow --verbose --target ~ "$pkg"
+done
 
-# tat script to ~/bin
-echo "Linking tat script..."
-mkdir -p ~/.local/bin
-ln -sf "$DOTFILES_DIR/scripts/tat" ~/.local/bin/tat
+# Stow scripts to ~/.dotfiles/bin
+echo "Linking scripts..."
+mkdir -p ~/.dotfiles/bin
+stow --restow --verbose --target ~/.dotfiles/bin scripts
 
 # Install yazi packages
 if command -v ya &>/dev/null; then

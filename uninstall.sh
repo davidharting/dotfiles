@@ -7,23 +7,16 @@ echo "Uninstalling dotfiles..."
 
 # Unstow all packages
 echo "Unlinking config packages..."
-stow --delete --verbose --target ~ \
-    alacritty amethyst helix k9s starship tmux bat nvim ghostty zellij lazygit yazi
+for dir in "$DOTFILES_DIR"/*/; do
+  pkg="${dir%/}"
+  pkg="${pkg##*/}"
+  [[ "$pkg" == "scripts" ]] && continue
+  stow --delete --verbose --target ~ "$pkg"
+done
 
-# Remove tat script symlink
-if [ -L ~/bin/tat ]; then
-    echo "Unlinking tat script..."
-    rm ~/bin/tat
-fi
-
-# Remove source line from ~/.zshrc
-SOURCE_LINE="source $DOTFILES_DIR/zsh/zshrc"
-if [ -f ~/.zshrc ] && grep -qF "$SOURCE_LINE" ~/.zshrc; then
-    echo "Removing source line from ~/.zshrc..."
-    grep -vF "$SOURCE_LINE" ~/.zshrc > ~/.zshrc.tmp && mv ~/.zshrc.tmp ~/.zshrc
-    # Also remove the comment if it's now orphaned
-    sed -i '' '/^# dotfiles$/d' ~/.zshrc 2>/dev/null || true
-fi
+# Unstow scripts from ~/.dotfiles/bin
+echo "Unlinking scripts..."
+stow --delete --verbose --target ~/.dotfiles/bin scripts
 
 echo ""
 echo "Done!"
