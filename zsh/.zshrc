@@ -1,10 +1,5 @@
 #!/bin/zsh
 
-
-# Inside of ~/.zshrc: source ~/repos/dotfiles/zsh/zshrc
-
-
-
 export PATH="$HOME/.local/bin:$PATH"
 
 # Shell integrations
