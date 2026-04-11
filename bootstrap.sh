@@ -39,3 +39,6 @@ fi
 # Install mise tools
 echo "Installing mise tools..."
 mise install
+
+# Sanity check: verify required apps are installed
+"$DOTFILES_DIR/check-apps.sh"
