@@ -35,9 +35,11 @@ defaults write com.apple.dock springboard-show-duration -int 0
 defaults write com.apple.dock springboard-hide-duration -int 0
 defaults write com.apple.dock springboard-page-duration -int 0
 
-# Dock: position, auto-hide, and cleanup
+# Dock: position, auto-hide, Mission Control, and multi-monitor behavior
 defaults write com.apple.dock orientation -string right
 defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock expose-group-apps -bool true  # group windows by app in Mission Control (AeroSpace)
+defaults write com.apple.spaces spans-displays -bool true   # displays span across monitors; disables "Displays have separate Spaces" (AeroSpace)
 # Remove all pinned apps from the Dock
 defaults write com.apple.dock persistent-apps -array
 # Remove all pinned folders/files from the Dock
