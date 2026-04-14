@@ -1,3 +1,5 @@
 .DS_Store
 yazi/.config/yazi/plugins
 docs/superpowers/
+karabiner/.config/karabiner/assets/
+karabiner/.config/karabiner/automatic_backups/
