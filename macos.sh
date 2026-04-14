@@ -63,4 +63,23 @@ defaults write NSGlobalDomain NSUserKeyEquivalents -dict-add "Tile Window to Rig
 killall Dock 2>/dev/null || true
 killall Finder 2>/dev/null || true
 
+# Login Items
+add_login_item() {
+    local app_name="$1"
+    local app_path="$2"
+
+    existing=$(osascript -e 'tell application "System Events" to get the name of every login item')
+
+    if echo "$existing" | grep -q "$app_name"; then
+        echo "  $app_name already in Login Items, skipping"
+    else
+        osascript -e "tell application \"System Events\" to make login item at end with properties {name: \"$app_name\", path: \"$app_path\", hidden: false}"
+        echo "  Added $app_name to Login Items"
+    fi
+}
+
+add_login_item "Bear"      "/Applications/Bear.app"
+add_login_item "Raycast"   "/Applications/Raycast.app"
+add_login_item "1Password" "/Applications/1Password.app"
+
 echo "Done! Some settings require a logout or reboot to take effect."
