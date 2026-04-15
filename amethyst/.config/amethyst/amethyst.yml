@@ -26,7 +26,7 @@ layouts:
   # - 3column-right
   # - 4column-left
   # - 4column-right
-  # - column
+  - column
   # - row
   # - floating
   # - widescreen-tall
@@ -36,7 +36,7 @@ layouts:
 # First mod (default option + shift).
 mod1:
   - option
-  # - shift
+  - shift
   # - control
   # - command
 
@@ -44,7 +44,7 @@ mod1:
 mod2:
   - option
   - shift
-  # - control
+  - control
   # - command
 
 # Commands:
@@ -238,13 +238,13 @@ disable-padding-on-builtin-display: true
 window-margins: true
 
 # Boolean flag for whether or not to set window margins if there is only one window on the screen, assuming window margins are enabled (default false).
-smart-window-margins: false
+smart-window-margins: true
 
 # # Add 10px margin between windows
 # window-margins: true
 # window-margin-size: 5
 # The size of the margins between windows (in px, default 0).
-window-margin-size: 24
+window-margin-size: 5
 
 # The max number of windows that may be visible on a screen at one time before
 # additional windows are minimized. A value of 0 disables the feature.
@@ -263,13 +263,13 @@ floating: []
 floating-is-blacklist: true
 
 # true if screen frames should exclude the status bar. false if the screen frames should include the status bar (default false).
-ignore-menu-bar: false
+ignore-menu-bar: true
 
 # true if windows smaller than a 500px square should be floating by default (default true)
 float-small-windows: true
 
 # true if the mouse should move position to the center of a window when it becomes focused (default false). Note that this is largely incompatible with focus-follows-mouse.
-mouse-follows-focus: false
+mouse-follows-focus: true
 
 # true if the windows underneath the mouse should become focused as the mouse moves (default false). Note that this is largely incompatible with mouse-follows-focus
 focus-follows-mouse: false
@@ -299,16 +299,16 @@ follow-space-thrown-windows: true
 window-resize-step: 5
 
 # Padding to apply between windows and the left edge of the screen (in px, default 0).
-screen-padding-left: 24
+screen-padding-left: 10
 
 # Padding to apply between windows and the right edge of the screen (in px, default 0).
-screen-padding-right: 24
+screen-padding-right: 10
 
 # Padding to apply between windows and the top edge of the screen (in px, default 0).
-screen-padding-top: 24
+screen-padding-top: 10
 
 # Padding to apply between windows and the bottom edge of the screen (in px, default 0).
-screen-padding-bottom: 24
+screen-padding-bottom: 10
 
 # true to maintain layout state across application executions (default true).
 restore-layouts-on-launch: true
