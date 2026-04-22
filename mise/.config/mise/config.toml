@@ -20,3 +20,28 @@ docker-cli = "latest"
 colima = "latest"
 claude = "latest"
 node = "latest"
+
+
+###
+# 
+coreutils = "latest"
+helm = "3"
+packer = "latest"
+terraform = "latest"
+vault = "latest"
+kubectl = "latest"
+kustomize = "latest"
+pre-commit = "latest"
+pnpm = "latest"
+yarn = "latest"
+shfmt = "latest"
+gomplate = "latest"
+crane = "latest"
+bazelisk = "latest"
+"aws-cli" = "latest"
+k9s = "latest"
+kubectx = "latest"    # also provides kubens
+prek = "latest"
+kubie = "latest"
+kubelogin = "latest"
+"pipx:yq" = "latest"  # kislyuk python-yq; omit if you prefer mikefarah's y
