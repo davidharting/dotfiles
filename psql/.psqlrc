@@ -1,0 +1,6 @@
+\echo AUTOCOMMIT = :AUTOCOMMIT
+\set PROMPT3 '>> '
+\set HISTFILE ~/.psql_history- :USER - :HOST - :PORT - :DBNAME
+\x auto
+\pset pager off
+\pset null '<NULL>'
