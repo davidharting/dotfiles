@@ -52,6 +52,14 @@ defaults delete com.apple.dock persistent-others 2>/dev/null || true
   /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
 /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:65:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || \
   /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:65:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+# Mission Control: disable ctrl+1 through ctrl+9 space-switching shortcuts
+# Key IDs 118–126 correspond to ctrl+1 through ctrl+9
+# Especially needed because ctrl+1/2/3 are relied on as in-app shortcuts in Bear and Zen browser
+for key in 118 119 120 121 122 123 124 125 126; do
+    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:${key}:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || \
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:${key}:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+done
+
 # Apply changes immediately (without this, a logout/reboot is required)
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
