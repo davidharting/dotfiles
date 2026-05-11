@@ -1,5 +1,6 @@
 brew "gnupg"
 brew "reattach-to-user-namespace"
+brew "render"
 brew "stow"
 
 cask "karabiner-elements"
@@ -11,6 +12,8 @@ cask "amethyst"
 # System libs / tools not available in mise
 brew "bash"
 brew "bash-completion"
+brew "bazelisk"
+brew "coreutils"
 brew "findutils"
 brew "libpq"
 brew "dnsmasq"
@@ -40,3 +43,4 @@ cask "google-cloud-sdk" # skip if using mise's gcloud
 
 # CLI tools
 cask "codex"
+brew "valkey"
