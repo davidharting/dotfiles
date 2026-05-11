@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+today=$(date +%Y-%m-%d)
+
+# Read stdin up front so it's available after the find-or-create step
+content=$(cat)
+
+# Find existing daily note or create one with the date tag
+bearcli create "$today" --tags "date" --if-not-exists --content "" > /dev/null
+
+# Append the captured stdin to the daily note
+printf '%s' "$content" | bearcli append --title "$today"

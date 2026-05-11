@@ -38,6 +38,14 @@ else
   echo "Warning: ya not found, skipping yazi package installation"
 fi
 
+# bearcli symlink
+if [ -d "/Applications/Bear.app" ]; then
+  mkdir -p ~/.local/bin
+  ln -sf /Applications/Bear.app/Contents/MacOS/bearcli ~/.local/bin/bearcli
+else
+  echo "Warning: Bear.app not found, skipping bearcli symlink"
+fi
+
 # Apply macOS settings
 "$DOTFILES_DIR/macos.sh"
 
