@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+
+
+export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -13,6 +16,11 @@ eval "$(zoxide init zsh)"
 
 ## kubernetes
 alias k='kubectl'
+alias kg="kubectl get"
+alias kgp="kubectl get po"
+alias kd="kubectl describe"
+alias kl="kubectl logs"
+
 
 ## git
 alias gitp='git push origin $(git branch --show-current)'
@@ -87,3 +95,8 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Herd Lite (PHP)
 export PATH="$HOME/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+
+autoload -Uz compinit && compinit
+
+# Local extras (not version controlled)
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
