@@ -31,6 +31,13 @@ alias art='php artisan'
 alias lg='lazygit'
 alias yz='yazi'
 
+## scratch
+function todaydir {
+    local dir="$HOME/repos/scratch/days/$(date +%Y-%m-%d)"
+    mkdir -p "$dir"
+    echo "$dir"
+}
+
 # Functions
 
 ## Terminal
