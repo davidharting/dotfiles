@@ -80,6 +80,9 @@ function toggle-reduce-motion {
 # export $TERM="xterm-256color"
 export EDITOR="nvim"
 
+# 1Password SSH agent
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
 # Setting editor to nvim breaks emacs-style keybindings for regular shell input. Restore that:
 bindkey -e
 
