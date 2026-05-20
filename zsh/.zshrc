@@ -33,7 +33,7 @@ alias yz='yazi'
 
 ## scratch
 function todaydir {
-    local dir="$HOME/repos/scratch/days/$(date +%Y-%m-%d)"
+    local dir="$HOME/repos/control-room/scratch/days/$(date +%Y-%m-%d)"
     mkdir -p "$dir"
     echo "$dir"
 }
