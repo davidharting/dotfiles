@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+action="${1:-}"
+
+dow=$(date +%u)
+mon_offset=$((dow - 1))
+fri_offset=$((5 - dow))
+
+if [ "$mon_offset" -gt 0 ]; then
+  mon_flag="-v-${mon_offset}d"
+else
+  mon_flag="-v+0d"
+fi
+if [ "$fri_offset" -ge 0 ]; then
+  fri_flag="-v+${fri_offset}d"
+else
+  fri_flag="-v${fri_offset}d"
+fi
+
+mon_year=$(date $mon_flag +%Y)
+mon_month=$(date $mon_flag +%B)
+mon_day=$(date $mon_flag +%-d)
+
+fri_month=$(date $fri_flag +%B)
+fri_day=$(date $fri_flag +%-d)
+
+if [ "$mon_month" = "$fri_month" ]; then
+  title="$mon_year $mon_month $mon_day - $fri_day"
+else
+  title="$mon_year $mon_month $mon_day - $fri_month $fri_day"
+fi
+
+id=$(bearcli create "$title" --tags "week" --if-not-exists --content "" --fields id --format tsv)
+
+if [ "$action" = "open" ]; then
+  bearcli open "$id"
+else
+  printf '%s\n' "$id"
+fi
