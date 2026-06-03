@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Clean a shell transcript piped on stdin:
+#   - drop the starship prompt line that precedes each command line
+#   - replace the ❯ prompt marker with $
+set -euo pipefail
+
+echo '```shellsession'
+awk '
+  { lines[NR] = $0 }
+  END {
+    for (i = 1; i <= NR; i++) {
+      if (lines[i] ~ /^❯ /) del[i-1] = 1
+    }
+    for (i = 1; i <= NR; i++) {
+      if (del[i]) continue
+      line = lines[i]
+      sub(/^❯ /, "$ ", line)
+      print line
+    }
+  }
+'
+echo '```'
