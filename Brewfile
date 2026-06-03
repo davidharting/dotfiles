@@ -42,5 +42,8 @@ cask "iterm2"
 cask "jetbrains-toolbox"
 cask "google-cloud-sdk" # skip if using mise's gcloud
 
+# Fonts
+cask "font-iosevka-term-nerd-font"
+
 # CLI tools
 brew "valkey"

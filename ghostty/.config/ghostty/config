@@ -1,4 +1,8 @@
-font-family = "Monaspace Argon Var Light"
+font-family = "Iosevka Term Nerd Font"
+font-style = Light
+font-style-bold = SemiBold
+font-style-italic = "Light Italic"
+font-style-bold-italic = "SemiBold Italic"
 macos-option-as-alt = true
 
 # Use cmd +k as my tmux prefix by sending ctrl + b
