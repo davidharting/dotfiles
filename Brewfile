@@ -43,5 +43,4 @@ cask "jetbrains-toolbox"
 cask "google-cloud-sdk" # skip if using mise's gcloud
 
 # CLI tools
-cask "codex"
 brew "valkey"
