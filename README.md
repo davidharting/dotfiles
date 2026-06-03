@@ -17,6 +17,11 @@ Idempotent — safe to re-run anytime to sync changes. This will:
 
 - Install/update Homebrew packages from `Brewfile`
 - Stow all config packages to `~`
+- Link `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`
 - Stow scripts to `~/.dotfiles/bin`
 - Install yazi packages
 - Apply macOS settings
+
+## Agent instructions
+
+Edit `agents/.agents/AGENTS.md` to update shared user-level instructions for coding agents. `install.sh` stows it to `~/.agents/AGENTS.md` and symlinks `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md` there.

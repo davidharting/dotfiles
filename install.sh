@@ -21,9 +21,18 @@ echo "Linking config packages..."
 for dir in "$DOTFILES_DIR"/*/; do
   pkg="${dir%/}"
   pkg="${pkg##*/}"
-  [[ "$pkg" == "scripts" ]] && continue
+  case "$pkg" in
+    scripts | tests)
+      continue
+      ;;
+  esac
   stow --restow --verbose --target ~ "$pkg"
 done
+
+echo "Linking agent instructions..."
+mkdir -p ~/.codex ~/.claude
+ln -sfn ~/.agents/AGENTS.md ~/.codex/AGENTS.md
+ln -sfn ~/.agents/AGENTS.md ~/.claude/CLAUDE.md
 
 # Stow scripts to ~/.dotfiles/bin
 echo "Linking scripts..."
