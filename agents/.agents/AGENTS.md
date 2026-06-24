@@ -2,6 +2,10 @@
 
 These are my user-level instructions for coding agents.
 
+# Concurrent edits
+
+Assume David or other agents may be editing the same workspace at the same time. If you encounter unexpected file changes, work with them when they are relevant and leave them alone when they are not. Do not overwrite, revert, or otherwise wipe out changes you did not make unless David explicitly asks you to, or you have asked and received permission.
+
 # Daily Log / Scratch Space
 
 Use this directory for daily notes and scratch files:
@@ -16,6 +20,30 @@ Do not log every action taken. Log when David asks for something to be recorded.
 
 Keep entries short and practical. The scratch space should preserve context that may matter later, not act as a transcript of the session.
 
+# Linear Scratch Space
+
+When working on a Linear ticket, use the `lineardir` script to create and locate the issue-specific scratch directory:
+
+```
+lineardir ISSUE-123
+```
+
+The script creates and prints a path under:
+
+```
+~/repos/control-room/scratch/linear/<lowercase-issue-key>/
+```
+
+All agents should be aware this script exists. When writing artifacts for Linear-ticket work, such as testing output, implementation plans, scratch documents, notes, or investigation results, put them in the appropriate `lineardir` directory.
+
 # Git worktrees
 
 When creating a git worktree, place it under `<repo>/.worktrees/<name>`, not as a sibling directory of the repo. If one already exists in the wrong place, offer to `git worktree move` it.
+
+# Testing Philosophy
+
+Tests create review burden, so favor succinct, high-value tests over broad test volume.
+
+Tests should be easy to extend when future regressions appear, but they should not aim to be exhaustive unless the behavior naturally lends itself to table-driven tests.
+
+Do not be afraid to create local or shared test helpers when they make tests clearer, easier to extend, or less repetitive.

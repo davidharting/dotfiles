@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage: lineardir ISSUE-123
+
+Create and print the scratch directory for a Linear issue.
+
+Issue keys must look like LETTERS-123:
+  - letters: at least 2 letters
+  - dash: literal -
+  - numbers: at least 1 digit
+
+Examples:
+  lineardir GROW-1234
+  lineardir KEYS-34443
+EOF
+}
+
+if [[ $# -ne 1 ]]; then
+  printf 'Error: expected exactly one issue key.\n\n' >&2
+  usage
+  exit 2
+fi
+
+issue_key="$1"
+
+if [[ ! "$issue_key" =~ ^[[:alpha:]]{2,}-[[:digit:]]+$ ]]; then
+  printf 'Error: invalid issue key: %s\n\n' "$issue_key" >&2
+  usage
+  exit 2
+fi
+
+issue_key="$(printf '%s' "$issue_key" | tr '[:upper:]' '[:lower:]')"
+dir="$HOME/repos/control-room/scratch/linear/$issue_key"
+
+mkdir -p "$dir"
+printf '%s\n' "$dir"
