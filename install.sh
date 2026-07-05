@@ -22,7 +22,7 @@ for dir in "$DOTFILES_DIR"/*/; do
   pkg="${dir%/}"
   pkg="${pkg##*/}"
   case "$pkg" in
-    scripts | tests)
+    scripts | tests | docs)
       continue
       ;;
   esac

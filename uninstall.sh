@@ -13,7 +13,11 @@ echo "Unlinking config packages..."
 for dir in "$DOTFILES_DIR"/*/; do
   pkg="${dir%/}"
   pkg="${pkg##*/}"
-  [[ "$pkg" == "scripts" ]] && continue
+  case "$pkg" in
+    scripts | tests | docs)
+      continue
+      ;;
+  esac
   stow --delete --verbose --target ~ "$pkg"
 done
 
