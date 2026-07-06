@@ -61,7 +61,7 @@ function tmux-reset {
     tmux kill-window -a
     tmux rename-window '🖥️ nvim'
     tmux new-window -n '✏️ scratch'
-    tmux new-window -n '🤖 claude'
+    tmux new-window -n '🤖 clankers'
     tmux select-window -t 1
 }
 
