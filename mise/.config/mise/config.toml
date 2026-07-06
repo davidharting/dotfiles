@@ -58,3 +58,8 @@ codex = "latest"
 pi = "latest"
 pandoc = "latest"
 postgres = "17"
+"npm:mac-ocr" = "latest"
+"npm:@playwright/cli" = "latest"
+"github:pls-rs/pls" = { version = "latest", prerelease = "true" }
+"github:DataDog/pup" = "latest"
+"github:render-oss/cli" = "latest"
