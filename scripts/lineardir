@@ -3,28 +3,36 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: lineardir ISSUE-123
+Usage: lineardir [ TEAM-KEY | team KEY ]
 
 Create and print the scratch directory for a Linear issue.
 
-Issue keys must look like LETTERS-123:
-  - letters: at least 2 letters
-  - dash: literal -
-  - numbers: at least 1 digit
+Both forms accept any valid team prefix (at least two letters) followed by 1+ digits.
+Input is case-insensitive and normalized to lowercase internally.
 
 Examples:
   lineardir GROW-1234
-  lineardir KEYS-34443
+  lineardir grow-1234
+  lineardir GROW 1234
+  lineardir grow 1234
 EOF
 }
 
-if [[ $# -ne 1 ]]; then
-  printf 'Error: expected exactly one issue key.\n\n' >&2
+if [[ $# -eq 2 ]]; then
+  first_lower="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  if [[ ! "$first_lower" =~ ^[[:alpha:]]{2,}$ ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
+    printf 'Error: two arguments must be a team prefix and a numeric issue ID.\n\n' >&2
+    usage
+    exit 2
+  fi
+  issue_key="${first_lower}-$2"
+elif [[ $# -eq 1 ]]; then
+  issue_key="$1"
+else
+  printf 'Error: expected exactly one key or two arguments (team + number).\n\n' >&2
   usage
   exit 2
 fi
-
-issue_key="$1"
 
 if [[ ! "$issue_key" =~ ^[[:alpha:]]{2,}-[[:digit:]]+$ ]]; then
   printf 'Error: invalid issue key: %s\n\n' "$issue_key" >&2
