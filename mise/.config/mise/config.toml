@@ -1,5 +1,8 @@
 [settings]
 lockfile = true
+# Aligns with Render's Aikido device-protection supply-chain policy: packages
+# must be at least 48h old before install. age.strict defaults to true.
+minimum_release_age = "48h"
 
 [tools]
 fd = "latest"
