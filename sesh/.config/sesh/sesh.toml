@@ -1,0 +1,10 @@
+[[window]]
+name = "✏️ scratch"
+
+[[window]]
+name = "🤖 clankers"
+
+[[wildcard]]
+pattern = "~/repos/**"
+startup_command = "tmux rename-window '🖥️ nvim'"
+windows = ["✏️ scratch", "🤖 clankers"]
