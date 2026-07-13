@@ -1663,6 +1663,10 @@ backend = "npm:@playwright/cli"
 version = "0.5.6"
 backend = "npm:@readwise/cli"
 
+[[tools."npm:ccusage"]]
+version = "20.0.17"
+backend = "npm:ccusage"
+
 [[tools."npm:mac-ocr"]]
 version = "1.1.0"
 backend = "npm:mac-ocr"
