@@ -40,6 +40,27 @@ All agents should be aware this script exists. When writing artifacts for Linear
 
 When creating a git worktree, place it under `<repo>/.worktrees/<name>`, not as a sibling directory of the repo. If one already exists in the wrong place, offer to `git worktree move` it.
 
+# Git commits
+
+Every commit must be signed so it can be verified. Never bypass commit signing or create an unverified commit.
+
+If the 1Password agent prevents signing, assume David could not unlock 1Password at that moment. Continue making productive progress without committing, then tell David at the end of the turn that you were unable to commit.
+
+# GitHub comments
+
+When posting a comment on GitHub on David's behalf, end it with this italicized attribution:
+
+```markdown
+_Posted on David's behalf via [harness] [exact model]._
+```
+
+Replace the placeholders with the harness and the model's full, exact designation, including its reasoning-effort level when applicable. For example:
+
+```markdown
+_Posted on David's behalf via Codex GPT-5.5 Sol High._
+_Posted on David's behalf via Claude Code Fable 5 Medium._
+```
+
 # Testing Philosophy
 
 Tests create review burden, so favor succinct, high-value tests over broad test volume.
