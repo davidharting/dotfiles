@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Edit the current branch's PR description in $EDITOR.
+#
+# Dumps the current PR body to a temp file, opens it in the editor, and on exit
+# updates the PR via `gh pr edit --body-file` -- but only if the content actually
+# changed. Quitting without saving (or saving with no edits) leaves the PR alone.
+set -euo pipefail
+
+editor="${EDITOR:-nvim}"
+
+tmp="$(mktemp -t pr-body.XXXXXX.md)"
+trap 'rm -f "$tmp"' EXIT
+
+# Fetch the current PR body. `gh pr view` with no arg targets the current branch's PR.
+gh pr view --json body --jq '.body' >"$tmp"
+
+before="$(shasum "$tmp" | awk '{print $1}')"
+
+"$editor" "$tmp"
+
+after="$(shasum "$tmp" | awk '{print $1}')"
+
+if [[ "$before" == "$after" ]]; then
+  echo "No changes -- PR description left unchanged." >&2
+  exit 0
+fi
+
+gh pr edit --body-file "$tmp"
+echo "PR description updated." >&2
