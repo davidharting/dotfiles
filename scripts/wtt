@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Pick or name a worktree, then attach to its tmux session.
+repo_name=""
+wt_args=()
+
+while (($#)); do
+  case "$1" in
+    --repo)
+      if (($# < 2)) || [[ -z "$2" ]]; then
+        echo "wtt: --repo requires a repository name" >&2
+        exit 2
+      fi
+      if [[ -n "$repo_name" ]]; then
+        echo "wtt: --repo may only be specified once" >&2
+        exit 2
+      fi
+      repo_name="$2"
+      shift 2
+      ;;
+    --repo=*)
+      if [[ -n "$repo_name" ]]; then
+        echo "wtt: --repo may only be specified once" >&2
+        exit 2
+      fi
+      repo_name="${1#--repo=}"
+      if [[ -z "$repo_name" ]]; then
+        echo "wtt: --repo requires a repository name" >&2
+        exit 2
+      fi
+      shift
+      ;;
+    --)
+      wt_args+=("$@")
+      break
+      ;;
+    *)
+      wt_args+=("$1")
+      shift
+      ;;
+  esac
+done
+
+repo_args=()
+if [[ -n "$repo_name" ]]; then
+  if [[ "$repo_name" == */* || "$repo_name" == "." || "$repo_name" == ".." ]]; then
+    echo "wtt: --repo expects a repository name, not a path: $repo_name" >&2
+    exit 2
+  fi
+
+  repo_path=""
+  for root in "$HOME/repos/render" "$HOME/repos"; do
+    candidate="$root/$repo_name"
+    if [[ -d "$candidate" ]]; then
+      repo_path="$(cd "$candidate" && pwd -P)"
+      break
+    fi
+  done
+
+  if [[ -z "$repo_path" ]]; then
+    echo "wtt: repository not found: $repo_name" >&2
+    echo "searched: $HOME/repos/render, $HOME/repos" >&2
+    exit 1
+  fi
+
+  repo_args=(-C "$repo_path")
+fi
+
+exec wt "${repo_args[@]}" switch --branches --prs --execute tat "${wt_args[@]}"
