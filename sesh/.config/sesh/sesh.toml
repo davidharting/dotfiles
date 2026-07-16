@@ -4,7 +4,10 @@ name = "✏️ scratch"
 [[window]]
 name = "🤖 clankers"
 
+[[window]]
+name = "📦 etc"
+
 [[wildcard]]
 pattern = "~/repos/**"
 startup_command = "tmux rename-window '🖥️ nvim'"
-windows = ["✏️ scratch", "🤖 clankers"]
+windows = ["✏️ scratch", "🤖 clankers", "📦 etc"]
