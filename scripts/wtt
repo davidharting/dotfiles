@@ -43,13 +43,13 @@ while (($#)); do
 done
 
 repo_args=()
+repo_path=""
 if [[ -n "$repo_name" ]]; then
   if [[ "$repo_name" == */* || "$repo_name" == "." || "$repo_name" == ".." ]]; then
     echo "wtt: --repo expects a repository name, not a path: $repo_name" >&2
     exit 2
   fi
 
-  repo_path=""
   for root in "$HOME/repos/render" "$HOME/repos"; do
     candidate="$root/$repo_name"
     if [[ -d "$candidate" ]]; then
@@ -67,4 +67,86 @@ if [[ -n "$repo_name" ]]; then
   repo_args=(-C "$repo_path")
 fi
 
-exec wt "${repo_args[@]}" switch --branches --prs --execute tat "${wt_args[@]}"
+branch_name=""
+create_requested=false
+option_takes_value=false
+
+if ((${#wt_args[@]})); then
+  for arg in "${wt_args[@]}"; do
+    if [[ "$option_takes_value" == true ]]; then
+      option_takes_value=false
+      continue
+    fi
+
+    case "$arg" in
+      --)
+        break
+        ;;
+      -c | --create)
+        create_requested=true
+        ;;
+      -b | --base | -x | --execute | --format | -C | --config | --config-set)
+        option_takes_value=true
+        ;;
+      --base=* | --execute=* | --format=* | --config=* | --config-set=*)
+        ;;
+      -*)
+        ;;
+      *)
+        if [[ -z "$branch_name" ]]; then
+          branch_name="$arg"
+        fi
+        ;;
+    esac
+  done
+fi
+
+create_args=()
+if [[ -n "$branch_name" && "$branch_name" != "@" && "$create_requested" == false ]]; then
+  git_args=(git)
+  if [[ -n "$repo_path" ]]; then
+    git_args+=(-C "$repo_path")
+  fi
+
+  if "${git_args[@]}" rev-parse --git-dir >/dev/null 2>&1 \
+    && "${git_args[@]}" check-ref-format --branch "$branch_name" >/dev/null 2>&1; then
+    branch_exists=false
+
+    if "${git_args[@]}" show-ref --verify --quiet "refs/heads/$branch_name"; then
+      branch_exists=true
+    else
+      while IFS=$'\t' read -r ref symref; do
+        if [[ -z "$symref" &&
+          ("$ref" == "refs/remotes/$branch_name" ||
+          "$ref" == refs/remotes/*/"$branch_name") ]]; then
+          branch_exists=true
+          break
+        fi
+      done < <("${git_args[@]}" for-each-ref --format=$'%(refname)\t%(symref)' refs/remotes)
+    fi
+
+    if [[ "$branch_exists" == false ]]; then
+      create_args=(--create)
+    fi
+  fi
+fi
+
+wt_command=(wt)
+if ((${#repo_args[@]})); then
+  wt_command+=("${repo_args[@]}")
+fi
+wt_command+=(switch)
+
+if ((${#create_args[@]})); then
+  wt_command+=("${create_args[@]}")
+fi
+if [[ "$create_requested" == false ]] && ((${#create_args[@]} == 0)); then
+  wt_command+=(--branches --prs)
+fi
+
+wt_command+=(--execute tat)
+if ((${#wt_args[@]})); then
+  wt_command+=("${wt_args[@]}")
+fi
+
+exec "${wt_command[@]}"
