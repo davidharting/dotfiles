@@ -24,6 +24,8 @@ alias kl="kubectl logs"
 
 ## git
 alias gitp='git push origin $(git branch --show-current)'
+alias gitpf='git push --force-with-lease origin $(git branch --show-current)'
+alias prw='gh pr view -w'
 
 ## laravel
 alias art='php artisan'
@@ -36,6 +38,23 @@ function todaydir {
     local dir="$HOME/repos/control-room/scratch/days/$(date +%Y-%m-%d)"
     mkdir -p "$dir"
     echo "$dir"
+}
+
+function cdt {
+    if (( $# != 0 )); then
+        echo "Usage: cdt" >&2
+        return 2
+    fi
+
+    local dir
+    dir="$(todaydir)" || return
+    builtin cd -- "$dir"
+}
+
+function cdl {
+    local dir
+    dir="$(lineardir "$@")" || return
+    builtin cd -- "$dir"
 }
 
 # Functions
