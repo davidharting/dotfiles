@@ -6,11 +6,11 @@ export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
-# Shell integrations
-eval "$(~/.local/bin/mise activate zsh)"
-eval "$(starship init zsh)"
-source <(fzf --zsh)
-eval "$(zoxide init zsh)"
+
+export MISE_GITHUB_TOKEN=$(gh auth token)
+
+# Shell integrations (mise/starship/fzf/zoxide) are initialized near the end of
+# this file, after all PATH modifications, so mise-managed tools take precedence.
 
 # Aliases
 
@@ -110,3 +110,10 @@ autoload -Uz compinit && compinit
 
 # Local extras (not version controlled)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+# Shell integrations — must run AFTER all PATH modifications above (homebrew,
+# herd-lite, jobrunner via .zshrc.local, flyctl) so mise's tool paths land first
+# in PATH. Otherwise `mise doctor` warns that mise paths aren't first.
+eval "$(~/.local/bin/mise activate zsh)"
+eval "$(starship init zsh)"
+source <(fzf --zsh)
+eval "$(zoxide init zsh)"
