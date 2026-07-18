@@ -1,86 +1,112 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
-script="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lineardir"
-tmpdir="$(mktemp -d)"
-trap 'rm -rf "$tmpdir"' EXIT
+lineardir_path="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lineardir"
 
-assert_eq() {
+function set_up() {
+  lineardir_tmpdir="$(mktemp -d)"
+  lineardir_home="$lineardir_tmpdir/home"
+  mkdir -p "$lineardir_home"
+}
+
+function tear_down() {
+  rm -rf "$lineardir_tmpdir"
+}
+
+function run_lineardir() {
+  HOME="$lineardir_home" "$lineardir_path" "$@"
+}
+
+function assert_issue_directory() {
   local expected="$1"
-  local actual="$2"
-  local message="$3"
-
-  if [[ "$actual" != "$expected" ]]; then
-    printf 'FAIL: %s\nexpected: %s\nactual:   %s\n' "$message" "$expected" "$actual" >&2
-    exit 1
-  fi
-}
-
-assert_dir_exists() {
-  local dir="$1"
-
-  if [[ ! -d "$dir" ]]; then
-    printf 'FAIL: expected directory to exist: %s\n' "$dir" >&2
-    exit 1
-  fi
-}
-
-assert_fails() {
-  local message="$1"
   shift
-  # Remaining args are the command + its arguments
-  if "$@" >"$tmpdir/stdout" 2>"$tmpdir/stderr"; then
-    printf 'FAIL: %s\ncommand unexpectedly succeeded\n' "$message" >&2
-    exit 1
-  fi
 
-  if ! grep -q 'Usage:' "$tmpdir/stderr"; then
-    printf 'FAIL: %s\nexpected usage text on stderr\nstderr:\n%s\n' "$message" "$(cat "$tmpdir/stderr")" >&2
-    exit 1
-  fi
+  local actual
+  actual="$(run_lineardir "$@")"
+
+  assert_same "$expected" "$actual"
+  assert_directory_exists "$expected"
 }
 
-home="$tmpdir/home"
-mkdir -p "$home"
+function assert_rejected() {
+  local output
+  local status
 
-# --- Original single-argument tests ---
-expected="$home/repos/control-room/scratch/linear/grow-1234"
-actual="$(HOME="$home" "$script" GROW-1234)"
-assert_eq "$expected" "$actual" "prints lowercased issue directory"
-assert_dir_exists "$expected"
+  if output="$(run_lineardir "$@" 2>&1)"; then
+    status=0
+  else
+    status=$?
+  fi
 
-# --- New two-argument tests ---
-expected="$home/repos/control-room/scratch/linear/grow-2511"
-actual="$(HOME="$home" "$script" grow 2511)"
-assert_eq "$expected" "$actual" "two-arg form: lowercase team + number"
-assert_dir_exists "$expected"
+  assert_same "2" "$status"
+  assert_contains "Usage:" "$output"
+}
 
-expected="$home/repos/control-room/scratch/linear/teams-9000"
-actual="$(HOME="$home" "$script" TEAMS 9000)"
-assert_eq "$expected" "$actual" "two-arg form: uppercase team + number"
-assert_dir_exists "$expected"
+function test_prints_a_lowercase_issue_directory() {
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/grow-1234" \
+    GROW-1234
+}
 
-# --- New hyphenated single-argument tests ---
-expected="$home/repos/control-room/scratch/linear/grow-2511"
-actual="$(HOME="$home" "$script" grow-2511)"
-assert_eq "$expected" "$actual" "hyphenated single-arg form works"
-assert_dir_exists "$expected"
+function test_accepts_a_lowercase_team_and_number() {
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/grow-2511" \
+    grow 2511
+}
 
-# --- Ensure both forms produce the same directory ---
-dir_one="$(HOME="$home" "$script" GROW 1234)"
-dir_two="$(HOME="$home" "$script" GROW-1234)"
-assert_eq "$dir_one" "$dir_two" "two-arg and hyphenated-single-arg produce identical dirs"
+function test_accepts_an_uppercase_team_and_number() {
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/teams-9000" \
+    TEAMS 9000
+}
 
-# --- Invalid argument tests ---
-assert_fails "rejects zero arguments" env HOME="$home" "$script"
-assert_fails "rejects invalid two-arg number (letters)" env HOME="$home" "$script" TEAM abc
-assert_fails "rejects one-letter team prefix" env HOME="$home" "$script" A 123
-assert_fails "rejects three arguments" env HOME="$home" "$script" GROW-123 extra arg
-assert_fails "rejects one-letter project keys in single-arg form" env HOME="$home" "$script" G-123
-assert_fails "rejects missing numeric suffix" env HOME="$home" "$script" GROW-
-assert_fails "rejects missing literal dash" env HOME="$home" "$script" GROW123
-assert_fails "rejects non-numeric suffix in single-arg form" env HOME="$home" "$script" TEAMS-ABC
-assert_fails "rejects empty two-argument number" env HOME="$home" "$script" TEAM ""
+function test_accepts_a_lowercase_hyphenated_key() {
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/grow-2511" \
+    grow-2511
+}
 
+function test_both_input_forms_produce_the_same_directory() {
+  local separate
+  local hyphenated
 
-printf 'lineardir tests passed\n'
+  separate="$(run_lineardir GROW 1234)"
+  hyphenated="$(run_lineardir GROW-1234)"
+
+  assert_same "$separate" "$hyphenated"
+}
+
+function test_rejects_zero_arguments() {
+  assert_rejected
+}
+
+function test_rejects_letters_as_the_issue_number() {
+  assert_rejected TEAM abc
+}
+
+function test_rejects_a_one_letter_team_prefix() {
+  assert_rejected A 123
+}
+
+function test_rejects_three_arguments() {
+  assert_rejected GROW-123 extra arg
+}
+
+function test_rejects_a_one_letter_team_in_a_hyphenated_key() {
+  assert_rejected G-123
+}
+
+function test_rejects_a_missing_numeric_suffix() {
+  assert_rejected GROW-
+}
+
+function test_rejects_a_missing_dash() {
+  assert_rejected GROW123
+}
+
+function test_rejects_a_non_numeric_hyphenated_suffix() {
+  assert_rejected TEAMS-ABC
+}
+
+function test_rejects_an_empty_separate_issue_number() {
+  assert_rejected TEAM ""
+}
