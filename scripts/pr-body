@@ -25,5 +25,12 @@ if [[ "$before" == "$after" ]]; then
   exit 0
 fi
 
-gh pr edit --body-file "$tmp"
+if ! gh pr edit --body-file "$tmp"; then
+  # Preserve the temp file so the edits can be recovered and applied manually.
+  trap - EXIT
+  echo "Failed to update PR description. Your changes are saved at:" >&2
+  echo "  $tmp" >&2
+  echo "Apply them manually with: gh pr edit --body-file '$tmp'" >&2
+  exit 1
+fi
 echo "PR description updated." >&2
