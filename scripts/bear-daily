@@ -11,7 +11,7 @@ else
 fi
 
 # Find existing daily note or create one with the date tag
-bearcli create "$today" --tags "date" --if-not-exists --content "" > /dev/null
+bearcli create "$today" --tags "date" --if-not-exists --content "" >/dev/null
 
 if [ -z "$content" ]; then
   bearcli open --title "$today"

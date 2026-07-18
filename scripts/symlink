@@ -6,22 +6,23 @@ set -euo pipefail
 # Handles the ln -s path math so you don't have to think about target-relative paths.
 
 _abspath() {
-    # Convert a cwd-relative path to absolute without touching disk.
-    # Needed so _relpath can do arithmetic on both paths uniformly.
-    [[ "$1" = /* ]] && echo "$1" || echo "$PWD/$1"
+  # Convert a cwd-relative path to absolute without touching disk.
+  # Needed so _relpath can do arithmetic on both paths uniformly.
+  [[ "$1" = /* ]] && echo "$1" || echo "$PWD/$1"
 }
 
 _relpath() {
-    # Compute the relative path from directory $1 to path $2 (both absolute).
-    # This is what ln -s needs: the path as seen from the symlink's own directory.
-    local from="$1" to="$2" common up=""
-    common="$from"
-    while [[ "$to" != "$common" && "$to" != "$common/"* ]]; do
-        common=$(dirname "$common")  # walk up until $to is under $common
-        up="../$up"                  # each step up needs a ../
-    done
-    local remainder="${to#$common}"; remainder="${remainder#/}"
-    echo "${up}${remainder}"
+  # Compute the relative path from directory $1 to path $2 (both absolute).
+  # This is what ln -s needs: the path as seen from the symlink's own directory.
+  local from="$1" to="$2" common up=""
+  common="$from"
+  while [[ "$to" != "$common" && "$to" != "$common/"* ]]; do
+    common=$(dirname "$common") # walk up until $to is under $common
+    up="../$up"                 # each step up needs a ../
+  done
+  local remainder="${to#"$common"}"
+  remainder="${remainder#/}"
+  echo "${up}${remainder}"
 }
 
 src=$(_abspath "$1")
