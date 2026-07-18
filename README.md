@@ -11,6 +11,18 @@ Safe to re-run anytime. Installs Homebrew, mise, and Herd Lite (PHP) if missing,
 
 Alternatively, run `install.sh` directly to skip the prerequisite checks.
 
+## Development
+
+Install the pinned development tools and run the checks with mise:
+
+```sh
+mise install
+mise run check
+```
+
+Use `mise run test` for the bashunit suite and `mise run format` to apply
+`shfmt` formatting.
+
 ## What `install.sh` does
 
 Idempotent — safe to re-run anytime to sync changes. This will:
