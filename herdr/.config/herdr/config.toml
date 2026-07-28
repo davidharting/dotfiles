@@ -1,0 +1,94 @@
+# herdr — agent multiplexer (https://herdr.dev)
+#
+# Tuned to match tmux/.tmux.conf so the muscle memory carries over. What does
+# *not* carry over is written up in docs/herdr.md — read that before switching.
+#
+#   herdr --default-config      print every option with upstream defaults
+#   prefix + shift+r            reload this file into a running server
+#   herdr server reload-config  same thing, from a shell
+
+[theme]
+# "terminal" inherits the host palette, which keeps herdr on the Dark+ theme
+# ghostty, bat, and hunk already agree on. Built-ins: catppuccin (default),
+# terminal, tokyo-night, gruvbox, nord, dracula, solarized, kanagawa,
+# rose-pine, vesper, and light variants — the settings screen lists them all.
+name = "terminal"
+
+[terminal]
+# Empty means $SHELL. tmux needed reattach-to-user-namespace to make pbcopy
+# work; herdr copies through the platform clipboard / OSC 52, so plain zsh is
+# enough and the wrapper can go.
+default_shell = ""
+# New panes, tabs, and workspaces open in the focused pane's directory — the
+# equivalent of `-c "#{pane_current_path}"` on the tmux split/new-window binds.
+new_cwd = "follow"
+
+[session]
+# Restore claude/codex/pi panes into their own conversation sessions when a
+# herdr session is restored, instead of dropping you at a bare shell.
+# Upstream default is false.
+resume_agents_on_restore = true
+
+[keys]
+# ghostty already maps cmd+k to \x02, so cmd+k keeps working as the prefix.
+prefix = "ctrl+b"
+
+# --- carried over from .tmux.conf ------------------------------------------
+
+# `bind v` split side by side.
+split_vertical = "prefix+v"
+# `bind h` split stacked. Bare prefix+h is pane focus in herdr, so the tmux
+# spelling moves to prefix+shift+h and keeps herdr's own prefix+minus.
+split_horizontal = ["prefix+minus", "prefix+shift+h"]
+# `bind x kill-pane`, and `bind c` / `bind e`.
+close_pane = "prefix+x"
+new_tab = "prefix+c"
+edit_scrollback = "prefix+e"
+detach = "prefix+q"
+switch_tab = "prefix+1..9"
+
+# `bind s` opened the sesh picker. herdr's workspace navigation is the nearest
+# thing, so it answers to both prefix+s and herdr's own prefix+w.
+workspace_picker = ["prefix+w", "prefix+s"]
+# `bind S choose-tree` — goto is herdr's cross-workspace pane navigator, and it
+# filters by agent state, which choose-tree could not do.
+goto = ["prefix+g", "prefix+shift+s"]
+# prefix+s now belongs to the picker, so settings moves off it.
+settings = "prefix+comma"
+
+# Pane focus stays behind the prefix. herdr has no vim-tmux-navigator
+# passthrough, so binding bare ctrl+h/j/k/l here would swallow them before nvim
+# ever saw them. See docs/herdr.md.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# herdr's built-in worktrees check out to <worktrees.directory>/<repo>/<slug>,
+# a flat tree outside the repo. That fights the <repo>/.worktrees/<branch>
+# layout that worktrunk and agents/.agents/AGENTS.md both assume, so this stays
+# unbound and `wtt` remains the only way to make a worktree.
+new_worktree = ""
+
+[ui]
+# Matches the cyan tmux status bar.
+accent = "cyan"
+# tmux showed per-pane titles via pane-border-status; this is the analog.
+show_agent_labels_on_pane_borders = true
+# `bind x kill-pane` existed specifically to skip tmux's confirmation prompt.
+confirm_close = false
+# `bind c` created a window immediately and sesh named it afterwards.
+prompt_new_tab_name = false
+
+[ui.toast]
+# off | herdr | terminal | system. "system" raises a real macOS notification
+# when a background agent goes blocked — the main reason to run herdr at all.
+delivery = "system"
+
+[ui.sound]
+enabled = true
+
+[advanced]
+# Agents produce long transcripts, and tmux was already capturing 32768 lines
+# for `bind e`. Upstream default is 10000000.
+scrollback_limit_bytes = 20000000

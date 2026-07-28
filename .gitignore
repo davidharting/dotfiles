@@ -3,3 +3,8 @@ yazi/.config/yazi/plugins
 docs/superpowers/
 karabiner/.config/karabiner/assets/
 karabiner/.config/karabiner/automatic_backups/
+
+# herdr writes its logs into its config directory, which stow folds into this
+# repo. See docs/herdr.md.
+herdr/.config/herdr/*.log
+herdr/.config/herdr/*.log.*
