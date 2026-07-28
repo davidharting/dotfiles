@@ -49,20 +49,41 @@ switch_tab = "prefix+1..9"
 
 # `bind s` opened the sesh picker. herdr's workspace navigation is the nearest
 # thing, so it answers to both prefix+s and herdr's own prefix+w.
-workspace_picker = ["prefix+w", "prefix+s"]
+#
+# This action is also the door into navigate mode, where bare h/j/k/l move pane
+# focus and stay in the mode, so ctrl+space gets there in one chord. Drop that
+# entry if ghostty doesn't forward ctrl+space cleanly.
+workspace_picker = ["prefix+w", "prefix+s", "ctrl+space"]
+
+# Bare keys inside navigate mode. These are only live in that mode, so they are
+# allowed to be unmodified — esc leaves. Listed at their defaults for
+# discoverability.
+navigate_pane_left = "h"
+navigate_pane_down = "j"
+navigate_pane_up = "k"
+navigate_pane_right = "l"
 # `bind S choose-tree` — goto is herdr's cross-workspace pane navigator, and it
 # filters by agent state, which choose-tree could not do.
 goto = ["prefix+g", "prefix+shift+s"]
 # prefix+s now belongs to the picker, so settings moves off it.
 settings = "prefix+comma"
 
-# Pane focus stays behind the prefix. herdr has no vim-tmux-navigator
-# passthrough, so binding bare ctrl+h/j/k/l here would swallow them before nvim
-# ever saw them. See docs/herdr.md.
-focus_pane_left = "prefix+h"
-focus_pane_down = "prefix+j"
-focus_pane_up = "prefix+k"
-focus_pane_right = "prefix+l"
+# Any binding without the `prefix+` marker is a direct chord — no prefix
+# needed. herdr only refuses direct bindings on unmodified printable keys,
+# which would intercept ordinary typing; anything with ctrl/alt/cmd is fine.
+#
+# So pane focus keeps the tmux chords. The difference from tmux is that there
+# is no `is_vim` escape hatch: herdr eats these before nvim sees them, in every
+# pane. That already matches today's behavior in a shell — the tmux binds only
+# pass through when the pane is running vim/fzf — but it does mean nvim's own
+# split navigation needs different keys. If that bites, ctrl+alt+h/j/k/l is
+# free everywhere and gives nvim ctrl+h/j/k/l back.
+#
+# The prefix forms stay bound as a fallback.
+focus_pane_left = ["ctrl+h", "prefix+h"]
+focus_pane_down = ["ctrl+j", "prefix+j"]
+focus_pane_up = ["ctrl+k", "prefix+k"]
+focus_pane_right = ["ctrl+l", "prefix+l"]
 
 # herdr's built-in worktrees check out to <worktrees.directory>/<repo>/<slug>,
 # a flat tree outside the repo. That fights the <repo>/.worktrees/<branch>

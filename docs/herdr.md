@@ -35,6 +35,32 @@ binary out from under mise. Use `mise upgrade` instead.
 Ids are positional and **compact when things close** (`1-1`, `1:2`). They are
 not durable handles — re-read them from `herdr pane list` rather than caching.
 
+## Modes
+
+tmux has one mode plus copy mode. herdr is properly modal, and this is the
+part that decides how the keyboard feels:
+
+- **terminal** — keys go to the pane. Where you live.
+- **prefix** — one keystroke after `ctrl+b`, same as tmux.
+- **navigate** — a sticky mode. Bare `h/j/k/l` move pane focus and *stay in
+  the mode*, `tab`/`shift+tab` cycle panes, `up`/`down` move between
+  workspaces, `1..9` switch workspace, `enter` opens, `esc` returns to
+  terminal mode. Entered with the `workspace_picker` action (`prefix+w`,
+  `prefix+s`, or `ctrl+space` in this config). A fresh session starts here.
+- **navigator** — the `goto` overlay, a fuzzy search box over every pane and
+  workspace that already exists, filterable by agent state.
+- **resize**, **settings**, **keybind help** — transient overlays.
+
+Bindings are prefix-free unless the string starts with `prefix+`. The only
+rule is that a *direct* binding cannot be an unmodified printable key — herdr
+disables those with a diagnostic rather than let them intercept typing.
+`ctrl+h`, `alt+1`, `ctrl+alt+n`, `cmd+k`, and function keys are all fine.
+Navigate-mode bindings are the exception and must be bare, since nothing is
+typing in that mode.
+
+Note that navigate mode ignores `focus_pane_*` entirely — the `navigate_pane_*`
+keys are the only pane movement there. The two sets never collide.
+
 ## Keybindings
 
 The config keeps the tmux spelling wherever herdr had a free key.
@@ -51,7 +77,8 @@ The config keeps the tmux spelling wherever herdr had a free key.
 | tree view | `prefix S` | `prefix G` or `prefix g` |
 | switch window/tab 1-9 | `prefix 1..9` | `prefix 1..9` |
 | detach | `prefix d` | `prefix q` |
-| pane focus | `ctrl+h/j/k/l` | `prefix h/j/k/l` |
+| pane focus | `ctrl+h/j/k/l` | `ctrl+h/j/k/l` (or `prefix h/j/k/l`) |
+| last pane | `ctrl+\` | — no equivalent action |
 
 Three tmux binds have no herdr equivalent at all:
 
@@ -124,20 +151,31 @@ so it can't fire by accident.
 `scripts/wtt` itself survives — only its `--execute tat` tail needs to point
 at a herdr-aware attach script.
 
-### 3. vim-tmux-navigator degrades gracefully, then bites once
+### 3. vim-tmux-navigator has no equivalent
 
-`nvim/.config/nvim/lua/plugins/vim-tmux-navigator.lua` binds `ctrl+h/j/k/l`
-to `TmuxNavigate*`, which shells out to `tmux select-pane`. Under herdr with
-no tmux around, `$TMUX` is unset and the plugin falls back to plain `wincmd` —
-so `ctrl+h/j/k/l` become ordinary nvim window navigation. That's fine.
+The config binds `ctrl+h/j/k/l` directly, so pane switching costs the same
+keystrokes it does today. What's missing is the `is_vim` check in
+`.tmux.conf`, which shells out to `ps` on every press and passes the key
+through when the pane is running vim or fzf. herdr has nothing like it —
+these keys are intercepted in every pane, unconditionally.
 
-The bite: **run herdr inside tmux and `$TMUX` is set again**, so those keys
-move the *outer* tmux panes while you are looking at herdr panes. During any
-side-by-side period, either drop the plugin or accept that.
+In practice that changes less than it sounds like:
 
-This is also why the config leaves pane focus on `prefix+h/j/k/l` instead of
-binding bare `ctrl+h/j/k/l` in herdr: herdr has no `is_vim` process check, so
-a direct binding would swallow those keys before nvim ever saw them.
+- In a **shell** pane, tmux already swallows `ctrl+h/j/k/l` today. No change,
+  including the fact that `ctrl+l` still won't clear the screen.
+- In an **nvim** pane, `ctrl+h/j/k/l` stop reaching nvim, so
+  `vim-tmux-navigator` and LazyVim's window navigation both go dark. nvim
+  split navigation needs different keys — `<leader>w` motions, or rebind.
+
+If nvim splits matter more than the exact chords, the one-line alternative is
+`ctrl+alt+h/j/k/l` in `[keys]`. That's free in nvim, free in zsh, and free in
+herdr. `alt+h/j/k/l` is *not* a good third option — LazyVim binds `<A-j>` and
+`<A-k>` to move lines.
+
+Separately: `vim-tmux-navigator` keys on `$TMUX`, so under plain herdr it
+falls back to `wincmd` (moot if herdr is eating the keys anyway). But **run
+herdr inside tmux and `$TMUX` is set again**, so any key that does reach nvim
+moves the *outer* tmux panes. During a side-by-side period, drop the plugin.
 
 ### 4. No plugins, no plugin manager
 
