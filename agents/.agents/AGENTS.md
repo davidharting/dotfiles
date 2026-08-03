@@ -38,13 +38,15 @@ All agents should be aware this script exists. When writing artifacts for Linear
 
 # Git worktrees
 
-When creating a git worktree, place it under `<repo>/.worktrees/<name>`, not as a sibling directory of the repo. If one already exists in the wrong place, offer to `git worktree move` it.
+When creating a git worktree, place it under `<repo>/.wt/<name>`, not as a sibling directory of the repo. If one already exists in the wrong place, offer to `git worktree move` it.
 
 # Git commits
 
 Every commit must be signed so it can be verified. Never bypass commit signing or create an unverified commit.
 
 If the 1Password agent prevents signing, assume David could not unlock 1Password at that moment. Continue making productive progress without committing, then tell David at the end of the turn that you were unable to commit.
+
+Do not try to cryptographically verify the signature yourself. GitHub is responsible for validating signatures. Commands like `git verify-commit` will fail locally, and you must never create or modify an allowed-signers file to make them pass. To confirm a commit is signed, just check that a signature is present, e.g. `git cat-file -p HEAD | grep -q '^gpgsig'` or inspect the commit with `git show`.
 
 # GitHub comments
 
