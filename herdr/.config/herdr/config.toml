@@ -70,7 +70,7 @@ help = "prefix+?"
 
 # Herdr defaults displaced by the bindings above.
 resize_mode = "prefix+shift+r"
-settings = "prefix+s"
+settings = "prefix+comma"
 toggle_sidebar = "prefix+shift+b"
 
 # ctrl+hjkl and alt+h/l below are supplied by herdr-splits.nvim. These remain
@@ -87,7 +87,7 @@ switch_tab = "prefix+1..9"
 rename_tab = "prefix+shift+t"
 close_tab = "prefix+shift+x"
 
-workspace_picker = "prefix+w"
+workspace_picker = "prefix+s"
 new_workspace = "prefix+shift+n"
 rename_workspace = "prefix+shift+w"
 close_workspace = "prefix+shift+d"
