@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+# sesh-preview: fzf preview command for the sesh session picker.
+#
+# For a live tmux session it shows a compact header -- the base repo name, a
+# "worktree" tag when the session is in a linked worktree, the branch (shown in
+# full), and git status --short -- followed by the panes of the 🤖 clankers
+# (agents) window, so meaningfully-named agent panes are visible at a glance.
+# Sessions without a clankers window fall back to listing all their windows.
+#
+# For a picker entry that has no live session (a config, zoxide dir, or plain
+# path) it shows the same repo header and a directory listing, falling back to
+# `sesh preview` when the entry can't be resolved to a directory.
+#
+# Usage (from the fzf --preview binding): sesh-preview '<selected line>'
+#   The selected line is the sesh list entry, which with --icons is
+#   "<icon> <name>"; the leading icon is stripped.
+#
+# Internal: `sesh-preview --print-name '<line>'` prints the parsed name and
+# exits. Used by the tests to exercise the parsing in isolation.
+
+set -uo pipefail
+
+# parse_name recovers the bare session/directory name from a sesh list entry.
+# It first strips ANSI color codes (fzf --ansi normally removes these before
+# substituting {}, but keep it correct when invoked directly too), then the
+# leading icon glyph and whitespace. Names start with an alphanumeric, '/', '~',
+# '.', '_' or '-' -- none of which the icon glyphs use -- so the leading
+# non-name run is unambiguous.
+parse_name() {
+  local esc=$'\033'
+  printf '%s' "$1" \
+    | sed -E "s/${esc}\[[0-9;]*m//g" \
+    | sed -E 's/^[^[:alnum:]/~._-]+[[:space:]]*//'
+}
+
+if [[ "${1:-}" == "--print-name" ]]; then
+  shift
+  parse_name "$*"
+  exit 0
+fi
+
+# Colors (ANSI; rendered by fzf's preview pane).
+c_head=$'\033[1;36m' # bold cyan
+c_dim=$'\033[2m'
+c_branch=$'\033[1;33m' # bold yellow
+c_active=$'\033[1;32m' # bold green
+c_cmd=$'\033[36m'      # cyan
+c_reset=$'\033[0m'
+
+name="$(parse_name "$*")"
+
+# repo_header <dir> <fallback> [suffix]: print the anchor/branch/status header
+# for a directory. The anchor line is the base repo name plus a "worktree" tag
+# when <dir> is a linked worktree, plus any dim <suffix> (e.g. session state).
+# When <dir> is not a git work tree, the anchor line is <fallback> instead.
+repo_header() {
+  local dir="$1" fallback="$2" suffix="${3:-}"
+  local common repo gitdir wt="" branch counts ahead behind tracking=""
+
+  if ! git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    printf '%s● %s%s%s%s%s\n' "$c_head" "$fallback" "$c_reset" "$c_dim" "$suffix" "$c_reset"
+    return 0
+  fi
+
+  common="$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+  repo="$(basename "$(dirname "$common")")"
+  gitdir="$(git -C "$dir" rev-parse --absolute-git-dir 2>/dev/null)"
+  [[ -n "$common" && "$gitdir" != "$common" ]] && wt=" · worktree"
+  printf '%s● %s%s%s%s%s%s\n' "$c_head" "$repo" "$c_reset" "$c_dim" "$wt" "$suffix" "$c_reset"
+
+  branch="$(git -C "$dir" symbolic-ref --quiet --short HEAD 2>/dev/null)" \
+    || branch="$(git -C "$dir" rev-parse --short HEAD 2>/dev/null)"
+  if counts="$(git -C "$dir" rev-list --left-right --count '@{upstream}...HEAD' 2>/dev/null)"; then
+    behind="${counts%%[[:space:]]*}"
+    ahead="${counts##*[[:space:]]}"
+    [[ "$ahead" -gt 0 ]] 2>/dev/null && tracking+=" ↑$ahead"
+    [[ "$behind" -gt 0 ]] 2>/dev/null && tracking+=" ↓$behind"
+  fi
+  printf '  %s⑂ %s%s%s\n' "$c_branch" "$branch" "$tracking" "$c_reset"
+
+  git -C "$dir" -c color.status=always status --short 2>/dev/null | sed 's/^/  /'
+}
+
+# print_window <session> <window> [agents_only]: print a window's name and its
+# panes, each as "[command] title"; the active pane's title is highlighted.
+# When agents_only is set, panes running a bare shell (idle, not an agent) are
+# skipped, and a placeholder is shown if none remain.
+print_window() {
+  local sess="$1" win="$2" agents_only="${3:-}" wname panes p pactive pcmd ptitle shown=0
+  wname="$(tmux display-message -p -t "=$sess:$win" -F '#{window_name}' 2>/dev/null)"
+  printf '%s%s%s\n' "$c_head" "$wname" "$c_reset"
+  mapfile -t panes < <(tmux list-panes -t "=$sess:$win" \
+    -F '#{pane_active}'$'\t''#{pane_current_command}'$'\t''#{pane_title}' 2>/dev/null)
+  for p in "${panes[@]}"; do
+    IFS=$'\t' read -r pactive pcmd ptitle <<<"$p"
+    if [[ -n "$agents_only" && "$pcmd" =~ ^-?(zsh|bash|sh|fish|dash|tcsh|ksh)$ ]]; then
+      continue
+    fi
+    shown=$((shown + 1))
+    if [[ "$pactive" == 1 ]]; then
+      printf '   %s[%s]%s %s%s%s\n' "$c_cmd" "$pcmd" "$c_reset" "$c_active" "$ptitle" "$c_reset"
+    else
+      printf '   %s[%s]%s %s\n' "$c_cmd" "$pcmd" "$c_reset" "$ptitle"
+    fi
+  done
+  if [[ -n "$agents_only" && "$shown" -eq 0 ]]; then
+    printf '   %s(no agent running)%s\n' "$c_dim" "$c_reset"
+  fi
+}
+
+if tmux has-session -t "=$name" 2>/dev/null; then
+  # --- Live tmux session -------------------------------------------------
+  attached="$(tmux display-message -p -t "=$name" -F '#{?session_attached, · attached,}' 2>/dev/null)"
+
+  # First window / first pane cwd gives the git context for the header.
+  first_win="$(tmux list-windows -t "=$name" -F '#{window_index}' 2>/dev/null | head -1)"
+  first_pane="$(tmux list-panes -t "=$name:$first_win" -F '#{pane_index}' 2>/dev/null | head -1)"
+  dir="$(tmux display-message -p -t "=$name:$first_win.$first_pane" -F '#{pane_current_path}' 2>/dev/null)"
+
+  repo_header "$dir" "$name" "$attached"
+  printf '%s──────────────%s\n' "$c_dim" "$c_reset"
+
+  # Show the 🤖 clankers (agents) window; fall back to all windows if absent.
+  clankers="$(tmux list-windows -t "=$name" -F '#{window_index}'$'\t''#{window_name}' 2>/dev/null \
+    | awk -F'\t' '$2 ~ /clankers/ {print $1; exit}')"
+  if [[ -n "$clankers" ]]; then
+    print_window "$name" "$clankers" agents
+  else
+    while IFS=$'\t' read -r widx _; do
+      print_window "$name" "$widx"
+    done < <(tmux list-windows -t "=$name" -F '#{window_index}'$'\t''#{window_name}' 2>/dev/null)
+  fi
+
+  exit 0
+fi
+
+# --- Not a live session: a directory, zoxide entry, or config ------------
+dir="${name/#\~/$HOME}"
+if [[ -d "$dir" ]]; then
+  repo_header "$dir" "$name"
+  printf '%s──────────────%s\n' "$c_dim" "$c_reset"
+  if command -v eza >/dev/null 2>&1; then
+    eza --all --oneline --icons --git --group-directories-first "$dir" 2>/dev/null
+  else
+    ls -A "$dir"
+  fi
+  exit 0
+fi
+
+# Can't resolve to a directory (e.g. a named config) -- defer to sesh so we
+# never regress on entries this script doesn't understand.
+exec sesh preview "$@"
