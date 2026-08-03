@@ -1,1 +1,7 @@
-worktree-path = "{{ repo_path }}/.worktrees/{{ (branch[13:] if branch[:13] == 'davidharting/' else branch[3:] if branch[:3] == 'dh/' else branch) | sanitize }}"
+worktree-path = "{{ repo_path }}/.wt/{{ (branch[13:] if branch[:13] == 'davidharting/' else branch[3:] if branch[:3] == 'dh/' else branch) | sanitize }}"
+
+# Copy gitignored files (deps, caches, .env, etc.) into every new worktree.
+# Reflink copy-on-write on APFS makes this near-free; skips existing files.
+# Repos needing narrower scope can add a .worktreeinclude.
+[post-start]
+copy-ignored = "wt step copy-ignored"
