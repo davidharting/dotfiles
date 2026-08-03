@@ -40,6 +40,10 @@ confirm_close = true
 copy_on_select = true
 sidebar_width = 30
 sidebar_start_collapsed = false
+# prefix+shift+b hides the sidebar entirely instead of leaving a narrow rail.
+sidebar_collapsed_mode = "hidden"
+# Agent panel as an attention queue rather than grouped by workspace.
+agent_panel_sort = "priority"
 
 [ui.sidebar.spaces]
 row_gap = 0
@@ -59,6 +63,9 @@ rows = [
 [ui.toast]
 delivery = "herdr"
 delay_seconds = 0
+
+[ui.toast.herdr]
+position = "top-right"
 
 [ui.sound]
 enabled = true
@@ -101,6 +108,14 @@ focus_pane_up = ["prefix+up", "ctrl+alt+k"]
 focus_pane_right = ["prefix+right", "ctrl+alt+l"]
 last_pane = "ctrl+alt+o"
 
+# tmux prefix+{ / prefix+} swapped panes by layout order. Herdr's swap is
+# directional, so { and } cover the left/right case and shift+arrows fill in
+# the rest.
+swap_pane_left = ["prefix+{", "prefix+shift+left"]
+swap_pane_right = ["prefix+}", "prefix+shift+right"]
+swap_pane_up = "prefix+shift+up"
+swap_pane_down = "prefix+shift+down"
+
 next_tab = ["prefix+n", "ctrl+alt+]"]
 previous_tab = ["prefix+p", "ctrl+alt+["]
 switch_tab = "prefix+1..9"
@@ -112,6 +127,11 @@ new_workspace = "prefix+shift+n"
 rename_workspace = "prefix+shift+w"
 close_workspace = "prefix+shift+d"
 switch_workspace = "prefix+shift+1..9"
+
+# Walk the sidebar agent panel. Under agent_panel_sort = "priority" this is the
+# attention queue, so j/k move down/up the list as it is currently ordered.
+next_agent = "prefix+j"
+previous_agent = "prefix+k"
 
 rename_pane = "prefix+shift+p"
 detach = "prefix+q"
