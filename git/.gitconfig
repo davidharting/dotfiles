@@ -10,3 +10,11 @@
 	gpgsign = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[http]
+	sslCAInfo = /Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem
+[credential "https://github.com"]
+	helper =
+	helper = !/Users/david/.local/share/mise/installs/gh/2.95.0/gh_2.95.0_macOS_arm64/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/Users/david/.local/share/mise/installs/gh/2.95.0/gh_2.95.0_macOS_arm64/bin/gh auth git-credential
