@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 wtt_path="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/wtt"
-wtt_base_args=$'switch\n--branches\n--prs\n--execute\ntat'
+wtt_base_args=$'switch\n--branches\n--prs\n--execute\nhat'
 
 function set_up() {
   wtt_tmpdir="$(mktemp -d)"
@@ -98,19 +98,19 @@ function test_switches_to_an_existing_remote_branch() {
 
 function test_creates_a_missing_explicit_branch_without_picker_arguments() {
   assert_wtt_output \
-    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--create\n--execute\ntat\nfeature/new' \
+    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--create\n--execute\nhat\nfeature/new' \
     --repo dotfiles feature/new
 }
 
 function test_finds_the_branch_after_an_option_value() {
   assert_wtt_output \
-    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--create\n--execute\ntat\n--base\nmain\nfeature/based' \
+    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--create\n--execute\nhat\n--base\nmain\nfeature/based' \
     --repo dotfiles --base main feature/based
 }
 
 function test_does_not_duplicate_an_explicit_create_flag() {
   assert_wtt_output \
-    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--execute\ntat\n--create\nfeature/explicit' \
+    $'-C\n'"$wtt_home/repos/dotfiles"$'\nswitch\n--execute\nhat\n--create\nfeature/explicit' \
     --repo dotfiles --create feature/explicit
 }
 

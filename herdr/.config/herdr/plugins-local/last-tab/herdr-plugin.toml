@@ -1,0 +1,34 @@
+id = "last-tab"
+name = "Last Tab"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Toggle to the last focused tab or workspace, matching tmux history"
+platforms = ["macos", "linux"]
+
+[[actions]]
+id = "focus"
+title = "Focus last tab"
+contexts = ["workspace"]
+command = ["bash", "last-tab.sh"]
+
+[[actions]]
+id = "focus-workspace"
+title = "Focus last workspace"
+contexts = ["workspace"]
+command = ["bash", "last-workspace.sh"]
+
+[[events]]
+on = "tab.focused"
+command = ["bash", "track-focus.sh"]
+
+[[events]]
+on = "tab.closed"
+command = ["bash", "track-focus.sh"]
+
+[[events]]
+on = "workspace.focused"
+command = ["bash", "track-focus.sh"]
+
+[[events]]
+on = "workspace.closed"
+command = ["bash", "track-focus.sh"]

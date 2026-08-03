@@ -105,8 +105,8 @@ export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/
 # Setting editor to nvim breaks emacs-style keybindings for regular shell input. Restore that:
 bindkey -e
 
-# Update tmux pane title with current command
-if [[ -n "$TMUX" ]]; then
+# Update tmux/herdr pane title with current command
+if [[ -n "$TMUX" || "${HERDR_ENV:-}" == "1" ]]; then
     precmd() {
         if [[ -n "$TMUX_PANE_NAME" ]]; then
             printf '\033]2;%s\033\\' "$TMUX_PANE_NAME"
@@ -120,6 +120,7 @@ fi
 
 
 export XDG_CONFIG_HOME="$HOME/.config"
+export HERDR_SPLITS_CONFIG="$HOME/.config/herdr-splits/herdr-splits.conf"
 
 # Herd Lite (PHP)
 export PATH="$HOME/.config/herd-lite/bin:$PATH"

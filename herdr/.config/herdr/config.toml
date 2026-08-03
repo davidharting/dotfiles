@@ -1,0 +1,181 @@
+# Ported from tmux/.tmux.conf and sesh/.config/sesh/sesh.toml for herdr 0.7.5.
+# tmux and sesh intentionally remain available during the trial period.
+
+onboarding = false
+
+[terminal]
+new_cwd = "follow"
+shell_mode = "auto"
+
+[theme]
+name = "terminal"
+
+[ui]
+accent = "cyan"
+pane_borders = true
+pane_gaps = true
+show_agent_labels_on_pane_borders = true
+prompt_new_tab_name = false
+confirm_close = true
+copy_on_select = true
+sidebar_width = 30
+sidebar_start_collapsed = false
+
+[ui.sidebar.spaces]
+row_gap = 0
+rows = [
+  ["state_icon", "workspace"],
+  ["branch", "git_status"],
+]
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+  ["state_icon", "workspace", "tab"],
+  ["agent", "state_text"],
+  ["terminal_title_stripped"],
+]
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+[ui.sound]
+enabled = true
+
+[session]
+resume_agents_on_restore = true
+
+[worktrees]
+# worktrunk remains responsible for normal worktree creation. This is only the
+# fallback location for worktrees created directly by herdr.
+directory = "~/.herdr/worktrees"
+
+[update]
+channel = "stable"
+
+[keys]
+prefix = "ctrl+b"
+
+# Existing tmux muscle memory.
+reload_config = "prefix+r"
+split_vertical = "prefix+v"
+split_horizontal = "prefix+h"
+new_tab = "prefix+c"
+close_pane = "prefix+x"
+edit_scrollback = "prefix+e"
+goto = "prefix+shift+s"
+zoom = "prefix+z"
+help = "prefix+?"
+
+# Herdr defaults displaced by the bindings above.
+resize_mode = "prefix+shift+r"
+settings = "prefix+s"
+toggle_sidebar = "prefix+shift+b"
+
+# ctrl+hjkl and alt+h/l below are supplied by herdr-splits.nvim. These remain
+# useful fallbacks before the plugin is installed or when it is disabled.
+focus_pane_left = ["prefix+left", "ctrl+alt+h"]
+focus_pane_down = ["prefix+down", "ctrl+alt+j"]
+focus_pane_up = ["prefix+up", "ctrl+alt+k"]
+focus_pane_right = ["prefix+right", "ctrl+alt+l"]
+last_pane = "ctrl+alt+o"
+
+next_tab = ["prefix+n", "ctrl+alt+]"]
+previous_tab = ["prefix+p", "ctrl+alt+["]
+switch_tab = "prefix+1..9"
+rename_tab = "prefix+shift+t"
+close_tab = "prefix+shift+x"
+
+workspace_picker = "prefix+w"
+new_workspace = "prefix+shift+n"
+rename_workspace = "prefix+shift+w"
+close_workspace = "prefix+shift+d"
+switch_workspace = "prefix+shift+1..9"
+
+rename_pane = "prefix+shift+p"
+detach = "prefix+q"
+
+[[keys.command]]
+key = "prefix+l"
+type = "plugin_action"
+command = "last-tab.focus"
+description = "focus last tab (tmux last-window)"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "plugin_action"
+command = "last-tab.focus-workspace"
+description = "focus last workspace (tmux switch-client -l)"
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "exec \"${SHELL:-sh}\""
+description = "scratch shell popup"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+b"
+type = "shell"
+command = "\"$HERDR_BIN_PATH\" pane move \"$HERDR_ACTIVE_PANE_ID\" --new-tab --no-focus"
+description = "break pane to a new tab (detached)"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "90%"
+height = "90%"
+
+# herdr-splits.nvim actions. Install the herdr plugin before using these.
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+[[keys.command]]
+key = "alt+h"
+type = "plugin_action"
+command = "herdr-splits.resize-left"
+
+[[keys.command]]
+key = "alt+l"
+type = "plugin_action"
+command = "herdr-splits.resize-right"
+
+# herdr-worktrunk complements wtt with workspace-local open/remove flows.
+[[keys.command]]
+key = "prefix+shift+g"
+type = "plugin_action"
+command = "worktrunk.open"
+description = "Worktree: switch / create from default branch"
+
+[[keys.command]]
+key = "prefix+shift+c"
+type = "plugin_action"
+command = "worktrunk.open-current"
+description = "Worktree: switch / create from current branch"
+
+[[keys.command]]
+key = "prefix+alt+d"
+type = "plugin_action"
+command = "worktrunk.remove"
+description = "Worktree: remove"

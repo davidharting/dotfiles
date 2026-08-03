@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# hat — herdr attach. The tat analogue.
+#
+# Focus an existing workspace rooted at the current directory, or create one.
+# Herdr 0.7.5 does not expose cwd on `workspace list`; pane records do, so the
+# lookup below maps cwd to workspace_id through `pane list`.
+
+target="$(pwd -P)"
+label="$(basename "$target")"
+
+first_tab='🖥️ nvim'
+extra_tabs=('✏️ scratch' '🤖 clankers' '📦 etc')
+
+case "$target" in
+  "$HOME"/repos/*) templated=true ;;
+  *) templated=false ;;
+esac
+
+seed_tabs() {
+  local ws="$1"
+  local tab="$2"
+  local name
+
+  [[ "$templated" == true ]] || return
+
+  herdr tab rename "$tab" "$first_tab" >/dev/null
+  for name in "${extra_tabs[@]}"; do
+    herdr tab create --workspace "$ws" --label "$name" --no-focus >/dev/null
+  done
+}
+
+# Worktrunk creates linked worktrees before invoking hat. Register those through
+# herdr's native worktree API so they are grouped beneath their source checkout
+# in the sidebar, including when wtt (rather than the plugin picker) created it.
+git_dir="$(git -C "$target" rev-parse --path-format=absolute --git-dir 2>/dev/null || true)"
+git_common_dir="$(git -C "$target" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || true)"
+
+if [[ -n "$git_dir" && "$git_dir" != "$git_common_dir" ]]; then
+  opened="$(herdr worktree open --path "$target" --focus --json)"
+  if ! jq -e '.result.already_open == true' >/dev/null <<<"$opened"; then
+    ws="$(jq -r '.result.workspace.workspace_id' <<<"$opened")"
+    tab="$(jq -r '.result.tab.tab_id' <<<"$opened")"
+    seed_tabs "$ws" "$tab"
+  fi
+else
+  existing="$({
+    herdr pane list 2>/dev/null || true
+  } | jq -r --arg cwd "$target" '
+    [.result.panes[]? | select(.cwd == $cwd) | .workspace_id][0] // empty
+  ' 2>/dev/null || true)"
+
+  if [[ -n "$existing" ]]; then
+    herdr workspace focus "$existing" >/dev/null
+  else
+    created="$(herdr workspace create --cwd "$target" --label "$label" --focus)"
+    ws="$(jq -r '.result.workspace.workspace_id' <<<"$created")"
+    tab="$(jq -r '.result.tab.tab_id' <<<"$created")"
+    seed_tabs "$ws" "$tab"
+  fi
+fi
+
+# Focusing is sufficient when called from a herdr pane or popup. Otherwise,
+# attach a client to the persistent session.
+if [[ -z "${HERDR_ENV:-}" ]]; then
+  exec herdr
+fi

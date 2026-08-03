@@ -9,16 +9,10 @@ macos-option-as-alt = true
 # https://davidharting.com/notes/how-i-use-cmdk-as-my-tmux-prefix
 keybind = cmd+k=text:\x02
 
-# vim-tmux integration wasn't working out of the box
-keybind = alt+left=text:\x1b[1;3D
-keybind = alt+right=text:\x1b[1;3C
-
-
 window-padding-x = 0
 window-padding-y = 0
 window-padding-balance = false
 
 
 theme = Dark+
-
 

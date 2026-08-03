@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Reproduce the externally managed plugins used by the herdr config. Keep refs
+# explicit so `herdr plugin install` does not bypass the dotfiles' pinning policy.
+herdr plugin install lmilojevicc/herdr-splits.nvim \
+  --ref c58bfdf01520845583e0033c11c56fc9d21a5424 \
+  --yes
+herdr plugin install devashish2203/herdr-worktrunk \
+  --ref a3107ca566bafcd463bc138007a0c01051970784 \
+  --yes
+
+# The tmux-compatible last-tab/workspace plugin is owned by this repository.
+herdr plugin unlink last-tab >/dev/null 2>&1 || true
+herdr plugin link "$HOME/.config/herdr/plugins-local/last-tab" --enabled >/dev/null
+
+# This is harmless when no server is running; the next launch reads the same
+# config and global plugin registry.
+herdr server reload-config >/dev/null 2>&1 || true

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Pick or name a worktree, then attach to its tmux session.
+# Pick or name a worktree, then attach to its herdr workspace.
 repo_name=""
 wt_args=()
 
@@ -144,7 +144,7 @@ if [[ "$create_requested" == false ]] && ((${#create_args[@]} == 0)); then
   wt_command+=(--branches --prs)
 fi
 
-wt_command+=(--execute tat)
+wt_command+=(--execute hat)
 if ((${#wt_args[@]})); then
   wt_command+=("${wt_args[@]}")
 fi
