@@ -161,6 +161,14 @@ key = "alt+l"
 type = "plugin_action"
 command = "herdr-splits.resize-right"
 
+# balance-splits also auto-balances on pane open/close via plugin events;
+# this binding is the manual escape hatch (tmux select-layout -E).
+[[keys.command]]
+key = "prefix+plus"
+type = "plugin_action"
+command = "balance-splits.all"
+description = "equalize pane splits"
+
 # herdr-worktrunk complements wtt with workspace-local open/remove flows.
 [[keys.command]]
 key = "prefix+shift+g"

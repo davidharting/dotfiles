@@ -1,0 +1,36 @@
+id = "balance-splits"
+name = "Balance Splits"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Equalize pane split ratios, like tmux select-layout -E"
+platforms = ["macos", "linux"]
+
+[[actions]]
+id = "all"
+title = "Balance all splits"
+contexts = ["workspace"]
+command = ["bash", "balance.sh", "all"]
+
+[[actions]]
+id = "columns"
+title = "Balance columns (vertical splits)"
+contexts = ["workspace"]
+command = ["bash", "balance.sh", "right"]
+
+[[actions]]
+id = "rows"
+title = "Balance rows (horizontal splits)"
+contexts = ["workspace"]
+command = ["bash", "balance.sh", "down"]
+
+# Auto-rebalance the affected tab whenever a pane opens or closes, like
+# tmux `set-hook -g after-split-window / pane-exited`. Trade-off: this also
+# discards manual resizes in that tab each time a pane count changes there.
+# Comment these out (and reload config) for on-demand balancing only.
+[[events]]
+on = "pane.created"
+command = ["bash", "balance.sh", "all"]
+
+[[events]]
+on = "pane.closed"
+command = ["bash", "balance.sh", "all"]

@@ -14,6 +14,10 @@ herdr plugin install devashish2203/herdr-worktrunk \
 herdr plugin unlink last-tab >/dev/null 2>&1 || true
 herdr plugin link "$HOME/.config/herdr/plugins-local/last-tab" --enabled >/dev/null
 
+# Equalize pane splits on demand and on pane open/close; also repo-owned.
+herdr plugin unlink balance-splits >/dev/null 2>&1 || true
+herdr plugin link "$HOME/.config/herdr/plugins-local/balance-splits" --enabled >/dev/null
+
 # This is harmless when no server is running; the next launch reads the same
 # config and global plugin registry.
 herdr server reload-config >/dev/null 2>&1 || true
