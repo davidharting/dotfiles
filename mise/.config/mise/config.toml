@@ -3,6 +3,9 @@ lockfile = true
 # Aligns with Render's Aikido device-protection supply-chain policy: packages
 # must be at least 48h old before install. age.strict defaults to true.
 minimum_release_age = "48h"
+# Coding agents ship frequently and are trusted first-party tools; opt them out
+# so we're not stuck 48h behind the latest release.
+minimum_release_age_excludes = ["claude", "npm:@openai/codex"]
 
 [tools]
 fd = "latest"
@@ -28,9 +31,7 @@ claude = "latest"
 node = "latest"
 
 
-###
-# 
-helm = "3"
+helm = "4"
 packer = "latest"
 terraform = "latest"
 vault = "latest"
@@ -44,7 +45,7 @@ gomplate = "latest"
 crane = "latest"
 "aws-cli" = "latest"
 k9s = "latest"
-kubectx = "latest"                                                # also provides kubens
+kubectx = "latest"                                                   # also provides kubens
 prek = "latest"
 kubie = "latest"
 kubelogin = "latest"
@@ -56,23 +57,19 @@ glow = "latest"
 "go:gotest.tools/gotestsum" = "latest"
 "go:github.com/tmuxpack/tpack/cmd/tpack" = "latest"
 pandoc = "latest"
-postgres = "17"
+postgres = "18"
 "npm:mac-ocr" = "latest"
 "npm:@playwright/cli" = "latest"
 "github:pls-rs/pls" = { version = "latest", prerelease = "true" }
 "github:DataDog/pup" = "latest"
 "github:render-oss/cli" = "latest"
 tlrc = "latest"
-"pipx:yq" = "3.4.3"
+"pipx:yq" = "4.1.2"
 "github:mikefarah/yq" = { version = "latest", rename_exe = "yq-go" }
 "npm:@openai/codex" = "latest"
-"aqua:earendil-works/pi" = "latest"
-"npm:@earendil-works/pi-coding-agent" = "latest"
-"go:github.com/joshmedeski/sesh/v2" = "v2.26.3-0.20260707133156-5b5ac184e9e0"
+"go:github.com/joshmedeski/sesh/v2" = "v2.27.0"
 worktrunk = "latest"
 "npm:ccusage" = "latest"
-"github:graykode/abtop" = "latest"
-"github:epilande/ccmux" = "latest"
-"github:modem-dev/hunk" = "latest"
 dust = "latest"
 "pipx:showboat" = "latest"
+herdr = "latest"
