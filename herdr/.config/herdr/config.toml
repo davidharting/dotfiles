@@ -87,7 +87,7 @@ switch_tab = "prefix+1..9"
 rename_tab = "prefix+shift+t"
 close_tab = "prefix+shift+x"
 
-workspace_picker = "prefix+s"
+workspace_picker = ["prefix+w", "prefix+s"]
 new_workspace = "prefix+shift+n"
 rename_workspace = "prefix+shift+w"
 close_workspace = "prefix+shift+d"
