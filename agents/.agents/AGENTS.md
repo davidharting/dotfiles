@@ -38,7 +38,7 @@ All agents should be aware this script exists. When writing artifacts for Linear
 
 # Git worktrees
 
-When creating a git worktree, place it under `<repo>/.wt/<name>`, not as a sibling directory of the repo. If one already exists in the wrong place, offer to `git worktree move` it.
+Use `wt`, rather than `git worktree` directly, for all worktree management, including creation and removal. This ensures its configured worktree location is used and its hooks run.
 
 # Git commits
 
