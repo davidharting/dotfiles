@@ -750,6 +750,65 @@ checksum = "sha256:6260af4468856811dd56108de0ebdb994aba4bdb61e83691df57a7038f13b
 url = "https://github.com/DataDog/pup/releases/download/v1.10.1/pup_1.10.1_Windows_x86_64.zip"
 url_api = "https://api.github.com/repos/DataDog/pup/releases/assets/496096481"
 
+[[tools."github:agavra/tuicr"]]
+version = "0.20.0"
+backend = "github:agavra/tuicr"
+
+[tools."github:agavra/tuicr"."platforms.linux-arm64"]
+checksum = "sha256:ff36ee981af4a198612b0769e7ab8f05aa957a455e31170b3af70346f81f41c0"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010071"
+
+[tools."github:agavra/tuicr"."platforms.linux-arm64-musl"]
+checksum = "sha256:ff36ee981af4a198612b0769e7ab8f05aa957a455e31170b3af70346f81f41c0"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010071"
+
+[tools."github:agavra/tuicr"."platforms.linux-x64"]
+checksum = "sha256:1835a289ff4ab32269bf466ca03b6a12a61fedf493c4a54302f4cabc65818587"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010298"
+
+[tools."github:agavra/tuicr"."platforms.linux-x64-baseline"]
+checksum = "sha256:1835a289ff4ab32269bf466ca03b6a12a61fedf493c4a54302f4cabc65818587"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010298"
+
+[tools."github:agavra/tuicr"."platforms.linux-x64-musl"]
+checksum = "sha256:1835a289ff4ab32269bf466ca03b6a12a61fedf493c4a54302f4cabc65818587"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010298"
+
+[tools."github:agavra/tuicr"."platforms.linux-x64-musl-baseline"]
+checksum = "sha256:1835a289ff4ab32269bf466ca03b6a12a61fedf493c4a54302f4cabc65818587"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499010298"
+
+[tools."github:agavra/tuicr"."platforms.macos-arm64"]
+checksum = "sha256:21fb2ce7af23e316da42402fdfc8815c0db7e1b738d7125eb426564212da8b48"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499009739"
+
+[tools."github:agavra/tuicr"."platforms.macos-x64"]
+checksum = "sha256:6851a93bb6058b18141884ac50f96c1ab78c64416647b7f75670adb9248327db"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499011827"
+
+[tools."github:agavra/tuicr"."platforms.macos-x64-baseline"]
+checksum = "sha256:6851a93bb6058b18141884ac50f96c1ab78c64416647b7f75670adb9248327db"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499011827"
+
+[tools."github:agavra/tuicr"."platforms.windows-x64"]
+checksum = "sha256:b4f439a79909fc17030a317e3cd9901629240d6fadafcc3af57344ea0a14adb8"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499012764"
+
+[tools."github:agavra/tuicr"."platforms.windows-x64-baseline"]
+checksum = "sha256:b4f439a79909fc17030a317e3cd9901629240d6fadafcc3af57344ea0a14adb8"
+url = "https://github.com/agavra/tuicr/releases/download/v0.20.0/tuicr-0.20.0-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/agavra/tuicr/releases/assets/499012764"
+
 [[tools."github:dlvhdr/diffnav"]]
 version = "0.11.0"
 backend = "github:dlvhdr/diffnav"
@@ -810,63 +869,63 @@ url = "https://github.com/dlvhdr/diffnav/releases/download/v0.11.0/diffnav_Windo
 url_api = "https://api.github.com/repos/dlvhdr/diffnav/releases/assets/378589423"
 
 [[tools."github:epilande/ccmux"]]
-version = "1.2.0"
+version = "1.2.2"
 backend = "github:epilande/ccmux"
 
 [tools."github:epilande/ccmux"."platforms.linux-arm64"]
-checksum = "sha256:789a0430e02d51ddb339ffb8fe2a441894111db20505029171dc9cea7faafbdb"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-notifier.zip"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663763"
+checksum = "sha256:f8e457be33419c364cbef4404926466e06577916f8bf79453e02b3bf9455df94"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-notifier.zip"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155554"
 
 [tools."github:epilande/ccmux"."platforms.linux-arm64-musl"]
-checksum = "sha256:789a0430e02d51ddb339ffb8fe2a441894111db20505029171dc9cea7faafbdb"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-notifier.zip"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663763"
+checksum = "sha256:f8e457be33419c364cbef4404926466e06577916f8bf79453e02b3bf9455df94"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-notifier.zip"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155554"
 
 [tools."github:epilande/ccmux"."platforms.linux-x64"]
-checksum = "sha256:731406d4355fb522cdbd1600a745f140126c7bfc001632045a130defee17a6f7"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-linux-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663761"
+checksum = "sha256:81e3efd95f2a8c761c575b2351399959485ae2ca25cffc017c1723fba3d0cf81"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-linux-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155553"
 
 [tools."github:epilande/ccmux"."platforms.linux-x64-baseline"]
-checksum = "sha256:731406d4355fb522cdbd1600a745f140126c7bfc001632045a130defee17a6f7"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-linux-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663761"
+checksum = "sha256:81e3efd95f2a8c761c575b2351399959485ae2ca25cffc017c1723fba3d0cf81"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-linux-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155553"
 
 [tools."github:epilande/ccmux"."platforms.linux-x64-musl"]
-checksum = "sha256:731406d4355fb522cdbd1600a745f140126c7bfc001632045a130defee17a6f7"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-linux-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663761"
+checksum = "sha256:81e3efd95f2a8c761c575b2351399959485ae2ca25cffc017c1723fba3d0cf81"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-linux-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155553"
 
 [tools."github:epilande/ccmux"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:731406d4355fb522cdbd1600a745f140126c7bfc001632045a130defee17a6f7"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-linux-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663761"
+checksum = "sha256:81e3efd95f2a8c761c575b2351399959485ae2ca25cffc017c1723fba3d0cf81"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-linux-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155553"
 
 [tools."github:epilande/ccmux"."platforms.macos-arm64"]
-checksum = "sha256:c3aaff256f79998e4a05aa44819e21de5c6c0ec77edcc7e2b2caa7bb6092f7d1"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-macos-arm64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663760"
+checksum = "sha256:5962866369a23f96dcc0f5419a76d860107812ef6036a1b673fb40ccdfb62244"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-macos-arm64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155552"
 
 [tools."github:epilande/ccmux"."platforms.macos-x64"]
-checksum = "sha256:058b3de0388463c7d9201958192b82a123d5c05a39e1c2580a44b6411979292c"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-macos-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663764"
+checksum = "sha256:5ddc812adbfb96e91ebf608fea70ffd70f9aec2b3288604a3644eac0e0881364"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-macos-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155556"
 
 [tools."github:epilande/ccmux"."platforms.macos-x64-baseline"]
-checksum = "sha256:058b3de0388463c7d9201958192b82a123d5c05a39e1c2580a44b6411979292c"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-macos-x64"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663764"
+checksum = "sha256:5ddc812adbfb96e91ebf608fea70ffd70f9aec2b3288604a3644eac0e0881364"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-macos-x64"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155556"
 
 [tools."github:epilande/ccmux"."platforms.windows-x64"]
-checksum = "sha256:789a0430e02d51ddb339ffb8fe2a441894111db20505029171dc9cea7faafbdb"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-notifier.zip"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663763"
+checksum = "sha256:f8e457be33419c364cbef4404926466e06577916f8bf79453e02b3bf9455df94"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-notifier.zip"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155554"
 
 [tools."github:epilande/ccmux"."platforms.windows-x64-baseline"]
-checksum = "sha256:789a0430e02d51ddb339ffb8fe2a441894111db20505029171dc9cea7faafbdb"
-url = "https://github.com/epilande/ccmux/releases/download/v1.2.0/ccmux-notifier.zip"
-url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/483663763"
+checksum = "sha256:f8e457be33419c364cbef4404926466e06577916f8bf79453e02b3bf9455df94"
+url = "https://github.com/epilande/ccmux/releases/download/v1.2.2/ccmux-notifier.zip"
+url_api = "https://api.github.com/repos/epilande/ccmux/releases/assets/493155554"
 
 [[tools."github:graykode/abtop"]]
 version = "0.5.3"
@@ -1213,6 +1272,65 @@ url_api = "https://api.github.com/repos/render-oss/cli/releases/assets/484841323
 checksum = "sha256:8461588ff572d409033a2945b46fce0b1b6f508a7ea4d19d132c2014ecfb15e5"
 url = "https://github.com/render-oss/cli/releases/download/v2.22.0/cli_2.22.0_windows_amd64.zip"
 url_api = "https://api.github.com/repos/render-oss/cli/releases/assets/484841323"
+
+[[tools."github:sachaos/viddy"]]
+version = "1.3.1"
+backend = "github:sachaos/viddy"
+
+[tools."github:sachaos/viddy"."platforms.linux-arm64"]
+checksum = "sha256:4bf88aa5443b09a49e8af55c1e92ff6148486856703b8f886e1984b0e541af4d"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334573"
+
+[tools."github:sachaos/viddy"."platforms.linux-arm64-musl"]
+checksum = "sha256:4bf88aa5443b09a49e8af55c1e92ff6148486856703b8f886e1984b0e541af4d"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334573"
+
+[tools."github:sachaos/viddy"."platforms.linux-x64"]
+checksum = "sha256:c0406da6c19bbfbf0381a1a54cf7098a97372c15e5d64bed38e4b8be53e8455e"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334545"
+
+[tools."github:sachaos/viddy"."platforms.linux-x64-baseline"]
+checksum = "sha256:c0406da6c19bbfbf0381a1a54cf7098a97372c15e5d64bed38e4b8be53e8455e"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334545"
+
+[tools."github:sachaos/viddy"."platforms.linux-x64-musl"]
+checksum = "sha256:c0406da6c19bbfbf0381a1a54cf7098a97372c15e5d64bed38e4b8be53e8455e"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334545"
+
+[tools."github:sachaos/viddy"."platforms.linux-x64-musl-baseline"]
+checksum = "sha256:c0406da6c19bbfbf0381a1a54cf7098a97372c15e5d64bed38e4b8be53e8455e"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334545"
+
+[tools."github:sachaos/viddy"."platforms.macos-arm64"]
+checksum = "sha256:46e9f219299e6a012075b46191fed21663bd916cea95f1e419b787a87ddd48bf"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447333781"
+
+[tools."github:sachaos/viddy"."platforms.macos-x64"]
+checksum = "sha256:fe3afac2154cdc6432449d1cf526744389f8686bd9b240f146e632aa532205ad"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-macos-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447333937"
+
+[tools."github:sachaos/viddy"."platforms.macos-x64-baseline"]
+checksum = "sha256:fe3afac2154cdc6432449d1cf526744389f8686bd9b240f146e632aa532205ad"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-macos-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447333937"
+
+[tools."github:sachaos/viddy"."platforms.windows-x64"]
+checksum = "sha256:b77c34a18d10fb3c9338ef292a59de00f3d695aa423fd3b6ff617ef6840e2a70"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-windows-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334767"
+
+[tools."github:sachaos/viddy"."platforms.windows-x64-baseline"]
+checksum = "sha256:b77c34a18d10fb3c9338ef292a59de00f3d695aa423fd3b6ff617ef6840e2a70"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-windows-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334767"
 
 [[tools.glow]]
 version = "2.1.2"
