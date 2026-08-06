@@ -10,10 +10,22 @@
 # pattern) always treats a path connection as new and re-runs the startup window
 # creation, so `sesh connect "$PWD"` appends the configured windows again on
 # every reconnect instead of being idempotent. Connecting by *name* matches
-# sesh's tmux strategy instead, which attaches idempotently (and picks
-# switch-client vs attach on its own). The tmux lookup below maps the current
-# directory to an existing session name without reimplementing sesh's naming, so
-# worktree sessions keep their names.
+# sesh's tmux strategy instead, which connects idempotently. The tmux lookup
+# below maps the current directory to an existing session name without
+# reimplementing sesh's naming, so worktree sessions keep their names.
+
+connect() {
+  # An external launcher should replace stale clients so its terminal becomes
+  # the sole client. Inside tmux, sesh naturally switches the current client.
+  if [ -z "${TMUX:-}" ]; then
+    tmux list-clients -F '#{client_name}' 2>/dev/null \
+      | while IFS= read -r client; do
+        [ -n "$client" ] && tmux detach-client -t "$client"
+      done
+  fi
+
+  exec sesh connect "$1"
+}
 
 target="$(pwd -P)"
 
@@ -21,7 +33,7 @@ existing="$(tmux list-sessions -F '#{session_path}	#{session_name}' 2>/dev/null 
   | awk -F'\t' -v p="$target" '$1 == p { print $2; exit }')"
 
 if [ -n "$existing" ]; then
-  exec sesh connect "$existing"
+  connect "$existing"
 fi
 
-exec sesh connect "$PWD"
+connect "$PWD"
