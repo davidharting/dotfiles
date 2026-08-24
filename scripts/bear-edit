@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Edit a Bear note in neovim. Every :w syncs the buffer back to Bear.
+#
+# Usage: bear-edit [title-or-id]
+#   With an argument: must exactly match one note (tried as id, then title).
+#   Without: pick a note interactively with gum.
+
+die() { echo "bear-edit: $*" >&2; exit 1; }
+
+[ $# -le 1 ] || die "usage: bear-edit [title-or-id]"
+
+if [ $# -eq 1 ]; then
+  id=$(bearcli show "$1" --fields id --format tsv 2>/dev/null) ||
+    id=$(bearcli show --title "$1" --fields id --format tsv 2>/dev/null) ||
+    die "no note exactly matches '$1' by id or title"
+else
+  notes=$(bearcli list --fields id,title,modified --format tsv)
+  picked=$(awk -F'\t' '{print $2}' <<<"$notes" | awk '!seen[$0]++' |
+    gum filter --placeholder 'Search notes...') || exit 130
+  matches=$(awk -F'\t' -v t="$picked" '$2 == t' <<<"$notes")
+  if [ "$(wc -l <<<"$matches")" -eq 1 ]; then
+    id=$(cut -f1 <<<"$matches")
+  else
+    line=$(awk -F'\t' '{print "modified " $3 "  " $1}' <<<"$matches" |
+      gum filter --header "Multiple notes titled '$picked'") || exit 130
+    id=${line##* }
+  fi
+fi
+
+title=$(bearcli show "$id" --fields title --format tsv)
+
+dir=$(mktemp -d "${TMPDIR:-/tmp}/bear-edit.XXXXXX")
+file="$dir/${title//\//-}.md"
+
+# One JSON read gives content and its hash together, so the --base guard
+# covers exactly the content we seeded the buffer with.
+note=$(bearcli cat "$id" --format json)
+jq -j '.content' <<<"$note" >"$file"
+hash=$(jq -r '.hash' <<<"$note")
+
+# BufWritePost fires on :w and :wq, so every save syncs back to Bear.
+# Each write passes --base so an edit made in Bear mid-session is never
+# clobbered; the hash is refreshed after every successful sync.
+cat >"$dir/sync.vim" <<EOF
+let s:base = '$hash'
+function! BearSync() abort
+  let out = system('bearcli overwrite $id --base ' . s:base
+        \ . ' < ' . shellescape(expand('%:p')) . ' 2>&1')
+  if v:shell_error
+    echohl ErrorMsg | echomsg 'Bear sync failed: ' . trim(out) | echohl None
+    return
+  endif
+  let read = system('bearcli cat $id --format json 2>&1')
+  if v:shell_error
+    echohl WarningMsg
+    echomsg 'Synced, but could not refresh base hash: ' . trim(read)
+    echohl None
+    return
+  endif
+  let s:base = json_decode(read).hash
+  echo 'Synced to Bear'
+endfunction
+autocmd BufWritePost <buffer> call BearSync()
+EOF
+
+nvim -c "source $dir/sync.vim" "$file"
+
+# Clean up only if the note matches the buffer; otherwise an edit failed to
+# sync (or never saved), so keep the file as a recovery copy.
+if cmp -s "$file" <(bearcli cat "$id"); then
+  rm -rf "$dir"
+else
+  echo "bear-edit: buffer and note differ; edits kept at $file" >&2
+fi
