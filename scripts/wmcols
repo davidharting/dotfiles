@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+# Resize every column on the focused OmniWM workspace to 1/N of the screen.
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage: wmcols N
+
+Resize every column on the focused OmniWM workspace to 1/N of the screen, so
+N columns are visible at once.
+
+OmniWM's visibleContainerCount setting only seeds NEW columns and needs an app
+restart, so this drives the runtime IPC instead. Focus is restored afterward.
+
+Examples:
+  wmcols 2    # halves
+  wmcols 3    # thirds
+  wmcols 4    # quarters
+EOF
+}
+
+# Seconds to wait for an animated focus move to land before treating the strip
+# as exhausted. omniwmctl returns before the animation finishes, so reading
+# focus immediately yields a stale value.
+readonly settle_timeout="${WMCOLS_SETTLE_TIMEOUT:-2}"
+readonly settle_interval="${WMCOLS_SETTLE_INTERVAL:-0.05}"
+
+# Opaque id of the focused window, empty if none. Field positions are read from
+# the header row so a change in column order does not silently break this.
+focused_id() {
+  omniwmctl query windows --format tsv | awk -F'\t' '
+    NR == 1 {
+      for (i = 1; i <= NF; i++) {
+        if ($i == "ID") id = i
+        if ($i == "FOCUSED") focused = i
+      }
+      next
+    }
+    $focused == "yes" { print $id; exit }
+  '
+}
+
+window_count() {
+  omniwmctl query windows --format tsv | awk 'NR > 1 { n++ } END { print n + 0 }'
+}
+
+# Wait for focus to move off $1. Echoes the new id, or $1 if it never moved.
+settle() {
+  local previous="$1" here
+  local deadline=$((SECONDS + settle_timeout))
+
+  while ((SECONDS < deadline)); do
+    here="$(focused_id)"
+    if [[ -n $here && $here != "$previous" ]]; then
+      printf '%s\n' "$here"
+      return 0
+    fi
+    sleep "$settle_interval"
+  done
+
+  printf '%s\n' "$previous"
+}
+
+main() {
+  [[ $# -eq 1 && $1 =~ ^[1-9][0-9]*$ ]] || {
+    usage
+    exit 1
+  }
+  local n="$1"
+
+  command -v omniwmctl >/dev/null 2>&1 || {
+    echo "wmcols: omniwmctl not found" >&2
+    exit 1
+  }
+  omniwmctl ping >/dev/null 2>&1 || {
+    echo "wmcols: OmniWM is not responding; is ipcEnabled = true in settings.toml?" >&2
+    exit 1
+  }
+
+  local windows
+  windows="$(window_count)"
+  [[ $windows -gt 0 ]] || {
+    echo "wmcols: no windows" >&2
+    exit 1
+  }
+
+  # The walk needs a focused window to start from, and OmniWM can come back from
+  # a restart with none -- focus-column reports success but does not take.
+  local original
+  original="$(focused_id)"
+  [[ -n $original ]] || {
+    echo "wmcols: no focused window; click a window first" >&2
+    exit 1
+  }
+
+  # Walk the strip left to right, sizing each column. Stop when focus revisits a
+  # column already sized: either the last column absorbed the move, or focus
+  # wrapped around.
+  omniwmctl command focus-column first >/dev/null
+  local here seen="" count=0 span="$((100 / n))%"
+  here="$(settle "$original")"
+
+  local i
+  for ((i = 0; i < windows + 2; i++)); do
+    [[ -n $here ]] || break
+    case $seen in
+      *"|$here|"*) break ;;
+    esac
+    seen="$seen|$here|"
+
+    omniwmctl command set-container-primary-span "$span" >/dev/null
+    count=$((count + 1))
+    omniwmctl command focus right >/dev/null
+    here="$(settle "$here")"
+  done
+
+  omniwmctl window focus "$original" >/dev/null
+
+  # count is how many columns exist on the strip; n is how many fit on screen.
+  local suffix=""
+  [[ $count -gt $n ]] && suffix=", rest scrolled off"
+  echo "wmcols: set $count column(s) to $span each -- $n visible at a time$suffix"
+}
+
+main "$@"
