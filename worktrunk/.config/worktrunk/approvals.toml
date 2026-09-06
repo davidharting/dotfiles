@@ -1,0 +1,4 @@
+[projects."github.com/davidharting/davidharting.com"]
+approved-commands = [
+    "wt step copy-ignored",
+]
