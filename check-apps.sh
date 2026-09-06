@@ -23,9 +23,8 @@ missing=0
 
 check_app "Ghostty" "Ghostty.app" || ((missing++))
 check_app "Raycast" "Raycast.app" || ((missing++))
-check_app "Zen Browser" "Zen Browser.app" || ((missing++))
+check_app "Zen Browser" "Zen.app" || ((missing++))
 check_app "1Password" "1Password.app" || ((missing++))
-check_app "Superkey" "Superkey.app" || ((missing++))
 
 echo ""
 if [[ $missing -eq 0 ]]; then
