@@ -4,7 +4,8 @@ brew "render"
 brew "stow"
 
 cask "karabiner-elements"
-cask "amethyst"
+cask "amethyst" # fallback tiling WM while trying OmniWM
+cask "omniwm"
 
 
 ### Added 2026-04-22
