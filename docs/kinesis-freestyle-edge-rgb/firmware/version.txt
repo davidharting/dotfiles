@@ -1,0 +1,4 @@
+Model name: FS Edge RGB
+KBD Firmware: 1.0.121.us (4MB), 07/07/2020
+LED Firmware: 1.0.58
+LED Bootloader: 1.0
