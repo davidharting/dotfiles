@@ -6,5 +6,5 @@ set -euo pipefail
 # the note boundary — there is no other separator.
 # All arguments are passed through to `bearcli list`.
 
-bearcli list "$@" --fields content,created,modified --format json |
-  jq -r 'map("---\ncreated: \(.created)\nmodified: \(.modified)\n---\n\n\(.content)") | join("\n\n")'
+bearcli list "$@" --fields content,created,modified --format json \
+  | jq -r 'map("---\ncreated: \(.created)\nmodified: \(.modified)\n---\n\n\(.content)") | join("\n\n")'

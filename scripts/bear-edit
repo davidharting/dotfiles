@@ -7,24 +7,27 @@ set -euo pipefail
 #   With an argument: must exactly match one note (tried as id, then title).
 #   Without: pick a note interactively with gum.
 
-die() { echo "bear-edit: $*" >&2; exit 1; }
+die() {
+  echo "bear-edit: $*" >&2
+  exit 1
+}
 
 [ $# -le 1 ] || die "usage: bear-edit [title-or-id]"
 
 if [ $# -eq 1 ]; then
-  id=$(bearcli show "$1" --fields id --format tsv 2>/dev/null) ||
-    id=$(bearcli show --title "$1" --fields id --format tsv 2>/dev/null) ||
-    die "no note exactly matches '$1' by id or title"
+  id=$(bearcli show "$1" --fields id --format tsv 2>/dev/null) \
+    || id=$(bearcli show --title "$1" --fields id --format tsv 2>/dev/null) \
+    || die "no note exactly matches '$1' by id or title"
 else
   notes=$(bearcli list --fields id,title,modified --format tsv)
-  picked=$(awk -F'\t' '{print $2}' <<<"$notes" | awk '!seen[$0]++' |
-    gum filter --placeholder 'Search notes...') || exit 130
+  picked=$(awk -F'\t' '{print $2}' <<<"$notes" | awk '!seen[$0]++' \
+    | gum filter --placeholder 'Search notes...') || exit 130
   matches=$(awk -F'\t' -v t="$picked" '$2 == t' <<<"$notes")
   if [ "$(wc -l <<<"$matches")" -eq 1 ]; then
     id=$(cut -f1 <<<"$matches")
   else
-    line=$(awk -F'\t' '{print "modified " $3 "  " $1}' <<<"$matches" |
-      gum filter --header "Multiple notes titled '$picked'") || exit 130
+    line=$(awk -F'\t' '{print "modified " $3 "  " $1}' <<<"$matches" \
+      | gum filter --header "Multiple notes titled '$picked'") || exit 130
     id=${line##* }
   fi
 fi
