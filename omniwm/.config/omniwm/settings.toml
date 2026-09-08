@@ -286,6 +286,11 @@ assignToWorkspace = "3"
 bundleId = "us.zoom.xos"
 id = "1A13117F-6139-49DD-9DFA-A86637BB17C4"
 
+[[appRules]]
+assignToWorkspace = "4"
+bundleId = "com.apple.mail"
+id = "F80A6804-E892-4741-B6F7-AFE53B71839A"
+
 [[hotkeys]]
 binding = "Unassigned"
 id = "toggleScratchpad.1"
