@@ -12,7 +12,7 @@ tmp="$(mktemp -t pr-body.XXXXXX.md)"
 trap 'rm -f "$tmp"' EXIT
 
 # Fetch the current PR body. `gh pr view` with no arg targets the current branch's PR.
-gh pr view --json body --jq '.body' >"$tmp"
+gh pr view --json body --jq '.body' | sed $'s/\r$//' >"$tmp"
 
 before="$(shasum "$tmp" | awk '{print $1}')"
 
