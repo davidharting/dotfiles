@@ -4,18 +4,19 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: wmcols N
+Usage: wmcols N [WORKSPACE]
 
-Resize every column on the focused OmniWM workspace to 1/N of the screen, so
-N columns are visible at once.
+Resize every column on an OmniWM workspace to 1/N of the screen, so N columns
+are visible at once. Acts on the current workspace unless WORKSPACE is given,
+in which case it switches there and switches back afterward.
 
 OmniWM's visibleContainerCount setting only seeds NEW columns and needs an app
 restart, so this drives the runtime IPC instead. Focus is restored afterward.
 
 Examples:
-  wmcols 2    # halves
-  wmcols 3    # thirds
-  wmcols 4    # quarters
+  wmcols 2      # halves, current workspace
+  wmcols 3      # thirds, current workspace
+  wmcols 4 4    # quarters, on workspace 4
 EOF
 }
 
@@ -37,6 +38,26 @@ focused_id() {
       next
     }
     $focused == "yes" { print $id; exit }
+  '
+}
+
+# Set when a target workspace was visited, so any exit path returns home.
+origin=""
+
+restore_workspace() {
+  [[ -z $origin ]] || omniwmctl command switch-workspace "$origin" >/dev/null 2>&1 || true
+}
+
+current_workspace() {
+  omniwmctl query workspaces --format tsv | awk -F'\t' '
+    NR == 1 {
+      for (i = 1; i <= NF; i++) {
+        if ($i == "WORKSPACE") ws = i
+        if ($i == "CURRENT") current = i
+      }
+      next
+    }
+    $current == "yes" { print $ws; exit }
   '
 }
 
@@ -62,11 +83,15 @@ settle() {
 }
 
 main() {
-  [[ $# -eq 1 && $1 =~ ^[1-9][0-9]*$ ]] || {
+  [[ $# -ge 1 && $# -le 2 && $1 =~ ^[1-9][0-9]*$ ]] || {
     usage
     exit 1
   }
-  local n="$1"
+  [[ $# -eq 1 || $2 =~ ^[1-9][0-9]*$ ]] || {
+    usage
+    exit 1
+  }
+  local n="$1" target="${2:-}"
 
   command -v omniwmctl >/dev/null 2>&1 || {
     echo "wmcols: omniwmctl not found" >&2
@@ -76,6 +101,20 @@ main() {
     echo "wmcols: OmniWM is not responding; is ipcEnabled = true in settings.toml?" >&2
     exit 1
   }
+
+  # Sizing acts on the focused workspace, so visiting the target is the only way
+  # to reach another one. The original is restored before returning.
+  if [[ -n $target ]]; then
+    origin="$(current_workspace)"
+    if [[ $target != "$origin" ]]; then
+      # Armed before the switch so every later exit path returns home.
+      trap restore_workspace EXIT
+      omniwmctl command switch-workspace "$target" >/dev/null
+      sleep 1
+    else
+      origin=""
+    fi
+  fi
 
   local windows
   windows="$(window_count)"
@@ -115,6 +154,7 @@ main() {
   done
 
   omniwmctl window focus "$original" >/dev/null
+  [[ -z $origin ]] || omniwmctl command switch-workspace "$origin" >/dev/null
 
   # count is how many columns exist on the strip; n is how many fit on screen.
   local suffix=""

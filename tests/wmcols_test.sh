@@ -12,6 +12,7 @@ function set_up() {
   # a log of the commands wmcols issued.
   printf 'w1\nw2\nw3\n' >"$wmcols_tmpdir/windows"
   printf 'w1\n' >"$wmcols_tmpdir/focus"
+  printf '1\n' >"$wmcols_tmpdir/workspace"
   : >"$wmcols_tmpdir/log"
 
   write_stub
@@ -35,6 +36,18 @@ echo "$*" >>"$dir/log"
 case "$1 ${2:-}" in
   "ping ")
     exit 0
+    ;;
+  "query workspaces")
+    printf 'ID\tWORKSPACE\tDISPLAY\tLAYOUT\tCURRENT\tVISIBLE\n'
+    current="$(cat "$dir/workspace")"
+    for ws in 1 2 3 4; do
+      marker=no
+      [[ $ws == "$current" ]] && marker=yes
+      printf 'id%s\t%s\tMon\tniri\t%s\tyes\n' "$ws" "$ws" "$marker"
+    done
+    ;;
+  "command switch-workspace")
+    printf '%s\n' "$3" >"$dir/workspace"
     ;;
   "query windows")
     printf 'ID\tPID\tAPP\tTITLE\tWORKSPACE\tDISPLAY\tMODE\tFOCUSED\tVISIBLE\n'
@@ -140,4 +153,36 @@ function test_stops_when_focus_wraps_around() {
   # the loop bound instead of stopping after one pass.
   WMCOLS_TEST_WRAP=1 capture_wmcols 2
   assert_same 3 "$(grep -c 'set-container-primary-span' "$wmcols_tmpdir/log")"
+}
+
+function test_rejects_a_non_numeric_workspace() {
+  capture_wmcols 2 abc
+  assert_same 1 "$captured_status"
+  assert_contains "Usage: wmcols N" "$captured_stderr"
+}
+
+function test_rejects_extra_arguments() {
+  capture_wmcols 2 3 4
+  assert_same 1 "$captured_status"
+}
+
+function test_visits_the_target_workspace_and_returns() {
+  capture_wmcols 2 3
+  assert_same 0 "$captured_status"
+  assert_same "1" "$(cat "$wmcols_tmpdir/workspace")"
+  assert_contains "switch-workspace 3" "$(cat "$wmcols_tmpdir/log")"
+}
+
+function test_does_not_switch_when_already_on_the_target() {
+  capture_wmcols 2 1
+  assert_same 0 "$captured_status"
+  assert_same 0 "$(grep -c 'switch-workspace' "$wmcols_tmpdir/log")"
+}
+
+function test_returns_home_when_the_target_cannot_be_sized() {
+  # The no-focus guard exits early, after the switch has already happened.
+  : >"$wmcols_tmpdir/focus"
+  capture_wmcols 2 4
+  assert_same 1 "$captured_status"
+  assert_same "1" "$(cat "$wmcols_tmpdir/workspace")"
 }
