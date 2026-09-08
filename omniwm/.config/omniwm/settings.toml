@@ -201,7 +201,7 @@ minHeight = 220.0
 minWidth = 574.0
 
 [[appRules]]
-assignToWorkspace = "1"
+assignToWorkspace = "2"
 bundleId = "app.zen-browser.zen"
 id = "1CF39647-F30D-4E76-9686-79B551F1B094"
 minHeight = 495.0
@@ -232,7 +232,7 @@ minHeight = 500.0
 minWidth = 800.0
 
 [[appRules]]
-assignToWorkspace = "1"
+assignToWorkspace = "2"
 bundleId = "com.mitchellh.ghostty"
 id = "7876C9EF-437E-4D4F-9C27-B1B02F4AABCE"
 minHeight = 48.0
@@ -245,19 +245,19 @@ minHeight = 650.0
 minWidth = 930.0
 
 [[appRules]]
-assignToWorkspace = "2"
+assignToWorkspace = "4"
 bundleId = "com.apple.MobileSMS"
 id = "552FB77D-BF0E-4737-90A6-B5BC6986C579"
 minHeight = 320.0
 minWidth = 660.0
 
 [[appRules]]
-assignToWorkspace = "1"
+assignToWorkspace = "2"
 bundleId = "net.shinyfrog.bear"
 id = "F8EAD3A8-8080-4C97-800A-8C5309A3A94F"
 
 [[appRules]]
-assignToWorkspace = "1"
+assignToWorkspace = "2"
 bundleId = "com.todoist.mac.Todoist"
 id = "CBEDEEFA-DC99-46F0-9D0C-15169ECF2A83"
 
@@ -267,17 +267,17 @@ bundleId = "com.1password.1password"
 id = "BF3B2AD2-A760-40F7-9C2E-53392925EB49"
 
 [[appRules]]
-assignToWorkspace = "2"
+assignToWorkspace = "4"
 bundleId = "com.apple.Music"
 id = "163C1D8A-0BFF-4065-9183-93CDE7936246"
 
 [[appRules]]
-assignToWorkspace = "2"
+assignToWorkspace = "4"
 bundleId = "org.whispersystems.signal-desktop"
 id = "4A40EB72-4350-479A-AEE5-B682813DC362"
 
 [[appRules]]
-assignToWorkspace = "2"
+assignToWorkspace = "4"
 bundleId = "com.electron.pocket-casts"
 id = "D5CC9156-DF91-457C-B401-632FCCBDFFAB"
 
