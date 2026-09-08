@@ -37,7 +37,7 @@ focused_id() {
       }
       next
     }
-    $focused == "yes" { print $id; exit }
+    !found && $focused == "yes" { print $id; found = 1 }
   '
 }
 
@@ -57,7 +57,7 @@ current_workspace() {
       }
       next
     }
-    $current == "yes" { print $ws; exit }
+    !found && $current == "yes" { print $ws; found = 1 }
   '
 }
 

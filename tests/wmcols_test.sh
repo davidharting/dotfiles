@@ -44,6 +44,8 @@ case "$1 ${2:-}" in
       marker=no
       [[ $ws == "$current" ]] && marker=yes
       printf 'id%s\t%s\tMon\tniri\t%s\tyes\n' "$ws" "$ws" "$marker"
+      # Keep writing after the current row to catch readers that close the pipe early.
+      sleep 0.05
     done
     ;;
   "command switch-workspace")
