@@ -43,7 +43,7 @@ raiseOnMouseFocus = false
 
 [gaps]
 fullscreenUsesOuterGaps = false
-size = 16.0
+size = 8.0
 
 [gaps.outer]
 bottom = 0.0
@@ -527,11 +527,11 @@ binding = "Option+H"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Option+J"
+binding = "Unassigned"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Option+K"
+binding = "Unassigned"
 id = "focus.up"
 
 [[hotkeys]]
@@ -567,11 +567,11 @@ binding = "Unassigned"
 id = "focusWindowUpOrBottom"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+J"
 id = "focusWindowOrWorkspaceDown"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+K"
 id = "focusWindowOrWorkspaceUp"
 
 [[hotkeys]]
@@ -719,7 +719,7 @@ binding = "Unassigned"
 id = "moveWindowToMonitor.down"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+M"
 id = "toggleFullscreen"
 
 [[hotkeys]]
