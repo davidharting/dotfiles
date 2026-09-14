@@ -5,3 +5,6 @@ worktree-path = "{{ repo_path }}/.wt/{{ (branch[13:] if branch[:13] == 'davidhar
 # Repos needing narrower scope can add a .worktreeinclude.
 [post-start]
 copy-ignored = "wt step copy-ignored"
+
+[step.copy-ignored]
+exclude = ["tilt/out/"]
