@@ -75,6 +75,8 @@ function rename-pane {
 }
 
 ## tmux
+alias tmux-whoami="tmux display-message -p '#S:#I.#P'"
+
 function tmux-reset {
     tmux kill-pane -a
     tmux kill-window -a
