@@ -1,0 +1,7 @@
+{
+  "name": "mise-npm-install",
+  "private": true,
+  "dependencies": {
+    "@doist/todoist-cli": "5.3.4"
+  }
+}
