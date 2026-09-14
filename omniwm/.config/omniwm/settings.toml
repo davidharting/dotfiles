@@ -532,11 +532,11 @@ binding = "Option+H"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+J"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+K"
 id = "focus.up"
 
 [[hotkeys]]
@@ -572,11 +572,11 @@ binding = "Unassigned"
 id = "focusWindowUpOrBottom"
 
 [[hotkeys]]
-binding = "Option+J"
+binding = "Unassigned"
 id = "focusWindowOrWorkspaceDown"
 
 [[hotkeys]]
-binding = "Option+K"
+binding = "Unassigned"
 id = "focusWindowOrWorkspaceUp"
 
 [[hotkeys]]
@@ -996,7 +996,7 @@ binding = "Unassigned"
 id = "preselectClear"
 
 [[hotkeys]]
-binding = "Control+Option+Space"
+binding = "Option+Shift+Space"
 id = "openCommandPalette"
 
 [[hotkeys]]
@@ -1061,7 +1061,7 @@ type = "main"
 
 [[workspaces]]
 id = "BEB842B5-E894-4791-9FD1-397C3CDD3538"
-layoutType = "niri"
+layoutType = "dwindle"
 name = "3"
 
 [workspaces.monitorAssignment]
