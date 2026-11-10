@@ -34,9 +34,13 @@ Never drive my browser. Do not attach to, control, or take actions in the Chrome
 
 When a task genuinely needs a browser, use the `playwright-cli` command, which drives its own separate browser instance. It is installed and on `PATH`.
 
-# Shell commands
+# Keep shell commands legible to the permission checker
 
-Never feed code to an interpreter on stdin, as in `python3 - <<'EOF'`, `bash -s`, `node -`, or `... | sh`. The permission checker cannot see what such code reads, so every one of these commands prompts me. Write the script to a file instead -- the session scratchpad or a temp dir for throwaway work, the `lineardir` for Linear-ticket work, or today's scratch dir -- and run it by path. Pass this rule on to any subagents.
+The permission checker approves a command only when it can tell, before the command runs, what the command will read and execute. Anything it cannot resolve statically prompts me, even when the real action is harmless. Write commands so nothing is ambiguous. Pass these rules on to any subagents.
+
+Never feed code to an interpreter on stdin, as in `python3 - <<'EOF'`, `bash -s`, `node -`, or `... | sh`. The checker cannot see what such code reads. Write the script to a file instead -- the session scratchpad or a temp dir for throwaway work, the `lineardir` for Linear-ticket work, or today's scratch dir -- and run it by path.
+
+Write every path as a literal absolute path. Do not put paths in shell variables (`R=/long/path; grep $R/pkg`), command substitution (`$(git rev-parse --show-toplevel)`), or `cd "$DIR" && ...`. The checker cannot expand these, so it treats the target as unknown, even when the real path is inside a working directory. Typing out a long path in full is fine; hiding it behind a short variable is not. If a command would repeat the same long path many times, split it into separate commands or use the dedicated Grep/Read tools instead.
 
 # Daily Log / Scratch Space
 
