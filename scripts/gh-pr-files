@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Print the paths of files changed in a pull request, one per line.
+#
+# Defaults to the PR for the current branch. Any arguments are passed through to
+# `gh pr view`, so `gh-pr-files 123` and `gh-pr-files --repo owner/name` work.
+#
+# Paths are relative to the repo root. Useful for piping, and for filtering a
+# buffer in nvim -- e.g. open the harpoon menu and run `:%!gh-pr-files` to make
+# the list the PR's files.
+set -euo pipefail
+
+gh pr view "$@" --json files --jq '.files[].path'
