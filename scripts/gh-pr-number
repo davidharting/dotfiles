@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Print the number of the current branch's pull request.
+#
+# Current branch only, by design: if you already know the number, you have no
+# reason to ask for it.
+set -euo pipefail
+
+gh pr view --json number --jq .number
