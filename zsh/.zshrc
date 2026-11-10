@@ -75,7 +75,8 @@ function rename-pane {
 }
 
 ## tmux
-alias tmux-whoami="tmux display-message -p '#S:#I.#P'"
+alias tt-who="tmux display-message -p '#S:#I.#P'"
+alias tt-clear='clear && tmux clear-history'
 
 function tmux-reset {
     tmux kill-pane -a
