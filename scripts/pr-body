@@ -1,18 +1,29 @@
 #!/usr/bin/env bash
-# Edit the current branch's PR description in $EDITOR.
+# Edit a PR's description in $EDITOR.
+#
+# Usage: pr-body [number]
+#
+# Targets the given PR number in the current repo, or the current branch's PR if
+# no number is given.
 #
 # Dumps the current PR body to a temp file, opens it in the editor, and on exit
 # updates the PR via `gh pr edit --body-file` -- but only if the content actually
 # changed. Quitting without saving (or saving with no edits) leaves the PR alone.
 set -euo pipefail
 
+if (($# > 1)); then
+  echo "usage: pr-body [number]" >&2
+  exit 2
+fi
+pr="${1:-}"
+
 editor="${EDITOR:-nvim}"
 
 tmp="$(mktemp -t pr-body.XXXXXX.md)"
 trap 'rm -f "$tmp"' EXIT
 
-# Fetch the current PR body. `gh pr view` with no arg targets the current branch's PR.
-gh pr view --json body --jq '.body' | sed $'s/\r$//' >"$tmp"
+# Fetch the PR body. With no arg, `gh pr view` targets the current branch's PR.
+gh pr view ${pr:+"$pr"} --json body --jq '.body' | sed $'s/\r$//' >"$tmp"
 
 before="$(shasum "$tmp" | awk '{print $1}')"
 
@@ -25,12 +36,12 @@ if [[ "$before" == "$after" ]]; then
   exit 0
 fi
 
-if ! gh pr edit --body-file "$tmp"; then
+if ! gh pr edit ${pr:+"$pr"} --body-file "$tmp"; then
   # Preserve the temp file so the edits can be recovered and applied manually.
   trap - EXIT
   echo "Failed to update PR description. Your changes are saved at:" >&2
   echo "  $tmp" >&2
-  echo "Apply them manually with: gh pr edit --body-file '$tmp'" >&2
+  echo "Apply them manually with: gh pr edit ${pr:+$pr }--body-file '$tmp'" >&2
   exit 1
 fi
 echo "PR description updated." >&2
