@@ -34,6 +34,10 @@ Never drive my browser. Do not attach to, control, or take actions in the Chrome
 
 When a task genuinely needs a browser, use the `playwright-cli` command, which drives its own separate browser instance. It is installed and on `PATH`.
 
+# Shell commands
+
+Never feed code to an interpreter on stdin, as in `python3 - <<'EOF'`, `bash -s`, `node -`, or `... | sh`. The permission checker cannot see what such code reads, so every one of these commands prompts me. Write the script to a file instead -- the session scratchpad or a temp dir for throwaway work, the `lineardir` for Linear-ticket work, or today's scratch dir -- and run it by path. Pass this rule on to any subagents.
+
 # Daily Log / Scratch Space
 
 Use this directory for daily notes and scratch files:
