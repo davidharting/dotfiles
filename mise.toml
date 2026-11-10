@@ -23,6 +23,13 @@ run = "shfmt -f . | grep -v scripts/fzf-tmux | xargs shfmt -d -i 2 -ci -bn"
 description = "Format shell scripts with shfmt"
 run = "shfmt -f . | grep -v scripts/fzf-tmux | xargs shfmt -w -i 2 -ci -bn"
 
+# Upgrades every tool to the newest version its configured range allows, which
+# also refreshes the matching mise.lock. Global and project config run
+# separately so each lockfile gets updated.
+[tasks.upgrade-all]
+description = "Upgrade all mise tools within their ranges and update lockfiles"
+run = ["mise upgrade --global --yes", "mise upgrade --local --yes"]
+
 [tasks.check]
 description = "Run tests, linting, and formatting checks"
 depends = ["test", "lint", "format-check"]
