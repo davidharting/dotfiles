@@ -7,7 +7,7 @@ Usage: lineardir [ TEAM-KEY | team KEY ]
 
 Create and print the scratch directory for a Linear issue.
 
-Both forms accept any valid team prefix (at least two letters) followed by 1+ digits.
+Both forms accept a team prefix (at least two letters or digits) followed by 1+ digits.
 Input is case-insensitive and normalized to lowercase internally.
 
 Examples:
@@ -20,7 +20,7 @@ EOF
 
 if [[ $# -eq 2 ]]; then
   first_lower="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
-  if [[ ! "$first_lower" =~ ^[[:alpha:]]{2,}$ ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
+  if [[ ! "$first_lower" =~ ^[[:alnum:]]{2,}$ ]] || [[ ! "$2" =~ ^[0-9]+$ ]]; then
     printf 'Error: two arguments must be a team prefix and a numeric issue ID.\n\n' >&2
     usage
     exit 2
@@ -34,7 +34,7 @@ else
   exit 2
 fi
 
-if [[ ! "$issue_key" =~ ^[[:alpha:]]{2,}-[[:digit:]]+$ ]]; then
+if [[ ! "$issue_key" =~ ^[[:alnum:]]{2,}-[[:digit:]]+$ ]]; then
   printf 'Error: invalid issue key: %s\n\n' "$issue_key" >&2
   usage
   exit 2

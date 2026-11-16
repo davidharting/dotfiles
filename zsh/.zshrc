@@ -59,7 +59,7 @@ function cdl {
         # segment that starts with an issue key.
         local branch
         branch="$(git branch --show-current 2>/dev/null)"
-        if [[ "/${branch}" =~ '/([[:alpha:]]{2,}-[[:digit:]]+)' ]]; then
+        if [[ "/${branch}" =~ '/([[:alnum:]]{2,}-[[:digit:]]+)' ]]; then
             set -- "$match[1]"
         else
             echo "cdl: no Linear issue key in branch '${branch}'" >&2

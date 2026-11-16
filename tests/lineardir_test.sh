@@ -75,6 +75,15 @@ function test_both_input_forms_produce_the_same_directory() {
   assert_same "$separate" "$hyphenated"
 }
 
+function test_accepts_digits_in_the_team_prefix() {
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/inc3846-12" \
+    inc3846 12
+  assert_issue_directory \
+    "$lineardir_home/repos/control-room/scratch/linear/inc3846-12" \
+    INC3846-12
+}
+
 function test_rejects_zero_arguments() {
   assert_rejected
 }
