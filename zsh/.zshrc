@@ -53,6 +53,19 @@ function cdt {
 
 function cdl {
     local dir
+    if (( $# == 0 )); then
+        # Branches look like davidharting/askeng-674-can-add-custom-domain-field
+        # or davidharting/inc-3486/remove-preview-secret; take the first path
+        # segment that starts with an issue key.
+        local branch
+        branch="$(git branch --show-current 2>/dev/null)"
+        if [[ "/${branch}" =~ '/([[:alpha:]]{2,}-[[:digit:]]+)' ]]; then
+            set -- "$match[1]"
+        else
+            echo "cdl: no Linear issue key in branch '${branch}'" >&2
+            return 2
+        fi
+    fi
     dir="$(lineardir "$@")" || return
     builtin cd -- "$dir"
 }
