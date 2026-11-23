@@ -1,0 +1,64 @@
+#!/bin/sh
+set -eu
+
+usage() {
+  cat <<'EOF'
+Usage: tt-yeet PANE WINDOW
+
+Move PANE to the end of WINDOW, beside its last pane. Focus stays put.
+
+  PANE    pane number in this window (as shown in the pane border)
+  WINDOW  window number in this session; it must already exist
+
+Either argument may be a full tmux target instead, e.g. 3.2 or work:3.
+
+Examples:
+  tt-yeet 1 3        pane 1 of this window -> window 3
+  tt-yeet 1 work:3   pane 1 of this window -> window 3 of session "work"
+  tt-yeet 3.2 1      pane 2 of window 3    -> window 1
+EOF
+}
+
+case "${1:-}" in
+  -h | --help)
+    usage
+    exit 0
+    ;;
+esac
+
+if [ $# -ne 2 ]; then
+  usage >&2
+  exit 2
+fi
+
+if [ -z "${TMUX_PANE:-}" ]; then
+  echo "tt-yeet: must be run inside tmux" >&2
+  exit 1
+fi
+
+# Resolve bare numbers against the pane this command runs in, not whichever
+# window the client happens to be looking at.
+here=$(tmux display-message -p -t "$TMUX_PANE" '#{session_name}:#{window_index}')
+session=${here%:*}
+
+case $1 in
+  *[:%]*) src=$1 ;;
+  *.*) src="$session:$1" ;;
+  *) src="$here.$1" ;;
+esac
+case $2 in
+  *:*) dst=$2 ;;
+  *) dst="$session:$2" ;;
+esac
+
+# display-message falls back to the current pane when its target doesn't
+# exist, so check the source with list-panes, which errors instead.
+tmux list-panes -t "$src" >/dev/null
+# Pin the source to its stable %id before anything moves.
+src_id=$(tmux display-message -p -t "$src" '#{pane_id}')
+
+# Assign separately so set -e sees list-panes fail for a missing window.
+dst_panes=$(tmux list-panes -t "$dst" -F '#{pane_id}')
+last=$(printf '%s\n' "$dst_panes" | tail -n 1)
+
+tmux join-pane -d -h -s "$src_id" -t "$last"
