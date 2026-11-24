@@ -32,7 +32,7 @@ Assume David or other agents may be editing the same workspace at the same time.
 
 Never drive my browser. Do not attach to, control, or take actions in the Chrome instance I am using -- it holds my live sessions, and I do not want agents clicking around in them.
 
-When a task genuinely needs a browser, use the `playwright-cli` command, which drives its own separate browser instance. It is installed and on `PATH`.
+When a task genuinely needs a browser, use the `agent-browser` command, which drives its own separate browser instance. It is installed and on `PATH`. Never pass it `--auto-connect`, `--profile` with one of my Chrome profiles, `--cdp`, or `connect`: each of those attaches to my real browser or its sessions.
 
 # Keep shell commands legible to the permission checker
 
